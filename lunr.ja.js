@@ -83,7 +83,13 @@
         }
       }
     };
-    var segmenter = new lunr.TinySegmenter(); // インスタンス生成
+
+      var segmenter;
+      try {
+          segmenter = new lunr.TinySegmenter(); // インスタンス生成
+      } catch(e) {
+          /* only needed for building index */
+      }
 
     lunr.ja.tokenizer = function(obj) {
       var i;
@@ -97,7 +103,7 @@
       var sliceEnd;
       var segStart;
 
-      if (!arguments.length || obj == null || obj == undefined)
+      if (!segmenter || !arguments.length || obj == null || obj == undefined)
         return [];
 
       if (Array.isArray(obj)) {
