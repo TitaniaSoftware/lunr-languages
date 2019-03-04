@@ -84,12 +84,12 @@
       }
     };
 
-      var segmenter;
-      try {
-          segmenter = new lunr.TinySegmenter(); // インスタンス生成
-      } catch(e) {
-          /* only needed for building index */
-      }
+    var segmenter;
+    try {
+      segmenter = new lunr.TinySegmenter(); // インスタンス生成
+    } catch (e) {
+      /* only needed for building index */
+    }
 
     lunr.ja.tokenizer = function(obj) {
       var i;
