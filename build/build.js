@@ -34,15 +34,25 @@ function wordCharacters(script) {
 
 // list mapping between locale, stemmer file, stopwords file, and char pattern
 var list = [{
+    locale: 'ar',
+    file: 'ArabicStemmer.js',
+    stopwords: stopwordsCustomFolder + 'ar.csv',
+    wordCharacters: wordCharacters('Arabic')
+},{
+    locale: 'cs',
+    file: 'CzechStemmer.js',
+    stopwords: stopwordsCustomFolder + 'cs.csv',
+    wordCharacters: wordCharacters('Latin')
+},{
     locale: 'da',
     file: 'DanishStemmer.js',
     stopwords: stopwordsRepoFolder + 'da.csv',
     wordCharacters: wordCharacters('Latin')
 }, {
-    locale: 'du',
-    file: 'DutchStemmer.js',
-    stopwords: stopwordsRepoFolder + 'nl.csv',
-    wordCharacters: wordCharacters('Latin')
+    locale: 'el',
+    file: 'GreekStemmer.js',
+    stopwords: stopwordsCustomFolder + 'el.csv',
+    wordCharacters: wordCharacters('Greek')
 }, {
     locale: 'fi',
     file: 'FinnishStemmer.js',
@@ -64,6 +74,11 @@ var list = [{
     stopwords: stopwordsRepoFolder + 'hu.csv',
     wordCharacters: wordCharacters('Latin')
 }, {
+    locale: 'id',
+    file: 'IndonesianStemmer.js',
+    stopwords: stopwordsCustomFolder + 'id.csv',
+    wordCharacters: wordCharacters('Latin')
+}, {
     locale: 'it',
     file: 'ItalianStemmer.js',
     stopwords: stopwordsRepoFolder + 'it.csv',
@@ -72,6 +87,16 @@ var list = [{
     locale: 'ja'
 }, {
     locale: 'jp'
+}, {
+    locale: 'lt',
+    file: 'LithuanianStemmer.js',
+    stopwords: stopwordsCustomFolder + 'lt.csv',
+    wordCharacters: wordCharacters('Latin')
+}, {
+    locale: 'nl',
+    file: 'DutchStemmer.js',
+    stopwords: stopwordsRepoFolder + 'nl.csv',
+    wordCharacters: wordCharacters('Latin')
 }, {
     locale: 'no',
     file: 'NorwegianStemmer.js',
