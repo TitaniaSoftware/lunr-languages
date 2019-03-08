@@ -1,0 +1,6 @@
+This is the README file for lunr-languages/build/snowball/jsstemmer directory.
+
+This directory contains the js build from the github snowball project:
+  https://github.com/snowballstem/snowball.git
+
+Rebuild snowball js output and copy here as desired.

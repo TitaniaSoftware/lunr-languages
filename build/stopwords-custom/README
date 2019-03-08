@@ -1,0 +1,18 @@
+This is the README file for lunr-languages/build/stopwords-custom.
+
+This directory contains single-line CSV files of stopwords for various languages.
+
+Known provenance and last snapshot of some files:
+  ar.csv
+  cs.csv
+  el.csv
+  ga.csv https://github.com/stopwords-iso/stopwords-ga 2019-03-08
+  id.csv
+  lt.csv
+  ne.csv https://github.com/prtx/Nepali-Stopwords 2019-03-08
+  no.csv
+  ro.csv
+  ru.csv
+  sv.csv
+  ta.csv
+  tr.csv

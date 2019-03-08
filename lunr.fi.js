@@ -1,5 +1,5 @@
 /*!
- * Lunr languages, `Finnish` language
+ * Lunr languages, `finnish-stemmer.js` language
  * https://github.com/MihaiValentin/lunr-languages
  *
  * Copyright 2014, Mihai Valentin
@@ -79,462 +79,945 @@
     /* lunr stemmer function */
     lunr.fi.stemmer = (function() {
       /* create the wrapped stemmer object */
-      var Among = lunr.stemmerSupport.Among,
-        SnowballProgram = lunr.stemmerSupport.SnowballProgram,
-        st = new function FinnishStemmer() {
-          var a_0 = [new Among("pa", -1, 1), new Among("sti", -1, 2),
-              new Among("kaan", -1, 1), new Among("han", -1, 1),
-              new Among("kin", -1, 1), new Among("h\u00E4n", -1, 1),
-              new Among("k\u00E4\u00E4n", -1, 1), new Among("ko", -1, 1),
-              new Among("p\u00E4", -1, 1), new Among("k\u00F6", -1, 1)
-            ],
-            a_1 = [
-              new Among("lla", -1, -1), new Among("na", -1, -1),
-              new Among("ssa", -1, -1), new Among("ta", -1, -1),
-              new Among("lta", 3, -1), new Among("sta", 3, -1)
-            ],
-            a_2 = [
-              new Among("ll\u00E4", -1, -1), new Among("n\u00E4", -1, -1),
-              new Among("ss\u00E4", -1, -1), new Among("t\u00E4", -1, -1),
-              new Among("lt\u00E4", 3, -1), new Among("st\u00E4", 3, -1)
-            ],
-            a_3 = [
-              new Among("lle", -1, -1), new Among("ine", -1, -1)
-            ],
-            a_4 = [
-              new Among("nsa", -1, 3), new Among("mme", -1, 3),
-              new Among("nne", -1, 3), new Among("ni", -1, 2),
-              new Among("si", -1, 1), new Among("an", -1, 4),
-              new Among("en", -1, 6), new Among("\u00E4n", -1, 5),
-              new Among("ns\u00E4", -1, 3)
-            ],
-            a_5 = [new Among("aa", -1, -1),
-              new Among("ee", -1, -1), new Among("ii", -1, -1),
-              new Among("oo", -1, -1), new Among("uu", -1, -1),
-              new Among("\u00E4\u00E4", -1, -1),
-              new Among("\u00F6\u00F6", -1, -1)
-            ],
-            a_6 = [new Among("a", -1, 8),
-              new Among("lla", 0, -1), new Among("na", 0, -1),
-              new Among("ssa", 0, -1), new Among("ta", 0, -1),
-              new Among("lta", 4, -1), new Among("sta", 4, -1),
-              new Among("tta", 4, 9), new Among("lle", -1, -1),
-              new Among("ine", -1, -1), new Among("ksi", -1, -1),
-              new Among("n", -1, 7), new Among("han", 11, 1),
-              new Among("den", 11, -1, r_VI), new Among("seen", 11, -1, r_LONG),
-              new Among("hen", 11, 2), new Among("tten", 11, -1, r_VI),
-              new Among("hin", 11, 3), new Among("siin", 11, -1, r_VI),
-              new Among("hon", 11, 4), new Among("h\u00E4n", 11, 5),
-              new Among("h\u00F6n", 11, 6), new Among("\u00E4", -1, 8),
-              new Among("ll\u00E4", 22, -1), new Among("n\u00E4", 22, -1),
-              new Among("ss\u00E4", 22, -1), new Among("t\u00E4", 22, -1),
-              new Among("lt\u00E4", 26, -1), new Among("st\u00E4", 26, -1),
-              new Among("tt\u00E4", 26, 9)
-            ],
-            a_7 = [new Among("eja", -1, -1),
-              new Among("mma", -1, 1), new Among("imma", 1, -1),
-              new Among("mpa", -1, 1), new Among("impa", 3, -1),
-              new Among("mmi", -1, 1), new Among("immi", 5, -1),
-              new Among("mpi", -1, 1), new Among("impi", 7, -1),
-              new Among("ej\u00E4", -1, -1), new Among("mm\u00E4", -1, 1),
-              new Among("imm\u00E4", 10, -1), new Among("mp\u00E4", -1, 1),
-              new Among("imp\u00E4", 12, -1)
-            ],
-            a_8 = [new Among("i", -1, -1),
-              new Among("j", -1, -1)
-            ],
-            a_9 = [new Among("mma", -1, 1),
-              new Among("imma", 0, -1)
-            ],
-            g_AEI = [17, 1, 0, 0, 0, 0, 0, 0, 0, 0,
-              0, 0, 0, 0, 0, 0, 8
-            ],
-            g_V1 = [17, 65, 16, 1, 0, 0, 0, 0, 0, 0, 0,
-              0, 0, 0, 0, 0, 8, 0, 32
-            ],
-            g_V2 = [17, 65, 16, 0, 0, 0, 0, 0, 0, 0,
-              0, 0, 0, 0, 0, 0, 8, 0, 32
-            ],
-            g_particle_end = [17, 97, 24, 1, 0, 0,
-              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 32
-            ],
-            B_ending_removed, S_x, I_p2, I_p1, sbp = new SnowballProgram();
-          this.setCurrent = function(word) {
-            sbp.setCurrent(word);
-          };
-          this.getCurrent = function() {
-            return sbp.getCurrent();
-          };
+      var st = new function() {
+        var base = new BaseStemmer();
+        /** @const */
+        var a_0 = [
+          ["pa", -1, 1],
+          ["sti", -1, 2],
+          ["kaan", -1, 1],
+          ["han", -1, 1],
+          ["kin", -1, 1],
+          ["h\u00E4n", -1, 1],
+          ["k\u00E4\u00E4n", -1, 1],
+          ["ko", -1, 1],
+          ["p\u00E4", -1, 1],
+          ["k\u00F6", -1, 1]
+        ];
 
-          function r_mark_regions() {
-            I_p1 = sbp.limit;
-            I_p2 = I_p1;
-            if (!habr1()) {
-              I_p1 = sbp.cursor;
-              if (!habr1())
-                I_p2 = sbp.cursor;
+        /** @const */
+        var a_1 = [
+          ["lla", -1, -1],
+          ["na", -1, -1],
+          ["ssa", -1, -1],
+          ["ta", -1, -1],
+          ["lta", 3, -1],
+          ["sta", 3, -1]
+        ];
+
+        /** @const */
+        var a_2 = [
+          ["ll\u00E4", -1, -1],
+          ["n\u00E4", -1, -1],
+          ["ss\u00E4", -1, -1],
+          ["t\u00E4", -1, -1],
+          ["lt\u00E4", 3, -1],
+          ["st\u00E4", 3, -1]
+        ];
+
+        /** @const */
+        var a_3 = [
+          ["lle", -1, -1],
+          ["ine", -1, -1]
+        ];
+
+        /** @const */
+        var a_4 = [
+          ["nsa", -1, 3],
+          ["mme", -1, 3],
+          ["nne", -1, 3],
+          ["ni", -1, 2],
+          ["si", -1, 1],
+          ["an", -1, 4],
+          ["en", -1, 6],
+          ["\u00E4n", -1, 5],
+          ["ns\u00E4", -1, 3]
+        ];
+
+        /** @const */
+        var a_5 = [
+          ["aa", -1, -1],
+          ["ee", -1, -1],
+          ["ii", -1, -1],
+          ["oo", -1, -1],
+          ["uu", -1, -1],
+          ["\u00E4\u00E4", -1, -1],
+          ["\u00F6\u00F6", -1, -1]
+        ];
+
+        /** @const */
+        var a_6 = [
+          ["a", -1, 8],
+          ["lla", 0, -1],
+          ["na", 0, -1],
+          ["ssa", 0, -1],
+          ["ta", 0, -1],
+          ["lta", 4, -1],
+          ["sta", 4, -1],
+          ["tta", 4, 2],
+          ["lle", -1, -1],
+          ["ine", -1, -1],
+          ["ksi", -1, -1],
+          ["n", -1, 7],
+          ["han", 11, 1],
+          ["den", 11, -1, r_VI],
+          ["seen", 11, -1, r_LONG],
+          ["hen", 11, 2],
+          ["tten", 11, -1, r_VI],
+          ["hin", 11, 3],
+          ["siin", 11, -1, r_VI],
+          ["hon", 11, 4],
+          ["h\u00E4n", 11, 5],
+          ["h\u00F6n", 11, 6],
+          ["\u00E4", -1, 8],
+          ["ll\u00E4", 22, -1],
+          ["n\u00E4", 22, -1],
+          ["ss\u00E4", 22, -1],
+          ["t\u00E4", 22, -1],
+          ["lt\u00E4", 26, -1],
+          ["st\u00E4", 26, -1],
+          ["tt\u00E4", 26, 2]
+        ];
+
+        /** @const */
+        var a_7 = [
+          ["eja", -1, -1],
+          ["mma", -1, 1],
+          ["imma", 1, -1],
+          ["mpa", -1, 1],
+          ["impa", 3, -1],
+          ["mmi", -1, 1],
+          ["immi", 5, -1],
+          ["mpi", -1, 1],
+          ["impi", 7, -1],
+          ["ej\u00E4", -1, -1],
+          ["mm\u00E4", -1, 1],
+          ["imm\u00E4", 10, -1],
+          ["mp\u00E4", -1, 1],
+          ["imp\u00E4", 12, -1]
+        ];
+
+        /** @const */
+        var a_8 = [
+          ["i", -1, -1],
+          ["j", -1, -1]
+        ];
+
+        /** @const */
+        var a_9 = [
+          ["mma", -1, 1],
+          ["imma", 0, -1]
+        ];
+
+        /** @const */
+        var /** Array<int> */ g_AEI = [17, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8];
+
+        /** @const */
+        var /** Array<int> */ g_C = [119, 223, 119, 1];
+
+        /** @const */
+        var /** Array<int> */ g_V1 = [17, 65, 16, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 32];
+
+        /** @const */
+        var /** Array<int> */ g_V2 = [17, 65, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 32];
+
+        /** @const */
+        var /** Array<int> */ g_particle_end = [17, 97, 24, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 32];
+
+        var /** boolean */ B_ending_removed = false;
+        var /** string */ S_x = '';
+        var /** number */ I_p2 = 0;
+        var /** number */ I_p1 = 0;
+
+
+        /** @return {boolean} */
+        function r_mark_regions() {
+          // (, line 42
+          I_p1 = base.limit;
+          I_p2 = base.limit;
+          // goto, line 47
+          golab0: while (true) {
+            var /** number */ v_1 = base.cursor;
+            lab1: {
+              if (!(base.in_grouping(g_V1, 97, 246))) {
+                break lab1;
+              }
+              base.cursor = v_1;
+              break golab0;
             }
+            base.cursor = v_1;
+            if (base.cursor >= base.limit) {
+              return false;
+            }
+            base.cursor++;
           }
+          // gopast, line 47
+          golab2: while (true) {
+            lab3: {
+              if (!(base.out_grouping(g_V1, 97, 246))) {
+                break lab3;
+              }
+              break golab2;
+            }
+            if (base.cursor >= base.limit) {
+              return false;
+            }
+            base.cursor++;
+          }
+          // setmark p1, line 47
+          I_p1 = base.cursor;
+          // goto, line 48
+          golab4: while (true) {
+            var /** number */ v_3 = base.cursor;
+            lab5: {
+              if (!(base.in_grouping(g_V1, 97, 246))) {
+                break lab5;
+              }
+              base.cursor = v_3;
+              break golab4;
+            }
+            base.cursor = v_3;
+            if (base.cursor >= base.limit) {
+              return false;
+            }
+            base.cursor++;
+          }
+          // gopast, line 48
+          golab6: while (true) {
+            lab7: {
+              if (!(base.out_grouping(g_V1, 97, 246))) {
+                break lab7;
+              }
+              break golab6;
+            }
+            if (base.cursor >= base.limit) {
+              return false;
+            }
+            base.cursor++;
+          }
+          // setmark p2, line 48
+          I_p2 = base.cursor;
+          return true;
+        };
 
-          function habr1() {
-            var v_1;
-            while (true) {
-              v_1 = sbp.cursor;
-              if (sbp.in_grouping(g_V1, 97, 246))
-                break;
-              sbp.cursor = v_1;
-              if (v_1 >= sbp.limit)
-                return true;
-              sbp.cursor++;
-            }
-            sbp.cursor = v_1;
-            while (!sbp.out_grouping(g_V1, 97, 246)) {
-              if (sbp.cursor >= sbp.limit)
-                return true;
-              sbp.cursor++;
-            }
+        /** @return {boolean} */
+        function r_R2() {
+          if (!(I_p2 <= base.cursor)) {
             return false;
           }
+          return true;
+        };
 
-          function r_R2() {
-            return I_p2 <= sbp.cursor;
+        /** @return {boolean} */
+        function r_particle_etc() {
+          var /** number */ among_var;
+          // (, line 55
+          // setlimit, line 56
+          if (base.cursor < I_p1) {
+            return false;
           }
+          var /** number */ v_2 = base.limit_backward;
+          base.limit_backward = I_p1;
+          // (, line 56
+          // [, line 56
+          base.ket = base.cursor;
+          // substring, line 56
+          among_var = base.find_among_b(a_0);
+          if (among_var == 0) {
+            base.limit_backward = v_2;
+            return false;
+          }
+          // ], line 56
+          base.bra = base.cursor;
+          base.limit_backward = v_2;
+          switch (among_var) {
+            case 1:
+              // (, line 63
+              if (!(base.in_grouping_b(g_particle_end, 97, 246))) {
+                return false;
+              }
+              break;
+            case 2:
+              // (, line 65
+              // call R2, line 65
+              if (!r_R2()) {
+                return false;
+              }
+              break;
+          }
+          // delete, line 67
+          if (!base.slice_del()) {
+            return false;
+          }
+          return true;
+        };
 
-          function r_particle_etc() {
-            var among_var, v_1;
-            if (sbp.cursor >= I_p1) {
-              v_1 = sbp.limit_backward;
-              sbp.limit_backward = I_p1;
-              sbp.ket = sbp.cursor;
-              among_var = sbp.find_among_b(a_0, 10);
-              if (among_var) {
-                sbp.bra = sbp.cursor;
-                sbp.limit_backward = v_1;
-                switch (among_var) {
-                  case 1:
-                    if (!sbp.in_grouping_b(g_particle_end, 97, 246))
-                      return;
-                    break;
-                  case 2:
-                    if (!r_R2())
-                      return;
-                    break;
+        /** @return {boolean} */
+        function r_possessive() {
+          var /** number */ among_var;
+          // (, line 69
+          // setlimit, line 70
+          if (base.cursor < I_p1) {
+            return false;
+          }
+          var /** number */ v_2 = base.limit_backward;
+          base.limit_backward = I_p1;
+          // (, line 70
+          // [, line 70
+          base.ket = base.cursor;
+          // substring, line 70
+          among_var = base.find_among_b(a_4);
+          if (among_var == 0) {
+            base.limit_backward = v_2;
+            return false;
+          }
+          // ], line 70
+          base.bra = base.cursor;
+          base.limit_backward = v_2;
+          switch (among_var) {
+            case 1:
+              // (, line 73
+              // not, line 73
+              {
+                var /** number */ v_3 = base.limit - base.cursor;
+                lab0: {
+                  // literal, line 73
+                  if (!(base.eq_s_b("k"))) {
+                    break lab0;
+                  }
+                  return false;
                 }
-                sbp.slice_del();
-              } else
-                sbp.limit_backward = v_1;
-            }
+                base.cursor = base.limit - v_3;
+              }
+              // delete, line 73
+              if (!base.slice_del()) {
+                return false;
+              }
+              break;
+            case 2:
+              // (, line 75
+              // delete, line 75
+              if (!base.slice_del()) {
+                return false;
+              }
+              // [, line 75
+              base.ket = base.cursor;
+              // literal, line 75
+              if (!(base.eq_s_b("kse"))) {
+                return false;
+              }
+              // ], line 75
+              base.bra = base.cursor;
+              // <-, line 75
+              if (!base.slice_from("ksi")) {
+                return false;
+              }
+              break;
+            case 3:
+              // (, line 79
+              // delete, line 79
+              if (!base.slice_del()) {
+                return false;
+              }
+              break;
+            case 4:
+              // (, line 82
+              // among, line 82
+              if (base.find_among_b(a_1) == 0) {
+                return false;
+              }
+              // delete, line 82
+              if (!base.slice_del()) {
+                return false;
+              }
+              break;
+            case 5:
+              // (, line 84
+              // among, line 84
+              if (base.find_among_b(a_2) == 0) {
+                return false;
+              }
+              // delete, line 85
+              if (!base.slice_del()) {
+                return false;
+              }
+              break;
+            case 6:
+              // (, line 87
+              // among, line 87
+              if (base.find_among_b(a_3) == 0) {
+                return false;
+              }
+              // delete, line 87
+              if (!base.slice_del()) {
+                return false;
+              }
+              break;
           }
+          return true;
+        };
 
-          function r_possessive() {
-            var among_var, v_1, v_2;
-            if (sbp.cursor >= I_p1) {
-              v_1 = sbp.limit_backward;
-              sbp.limit_backward = I_p1;
-              sbp.ket = sbp.cursor;
-              among_var = sbp.find_among_b(a_4, 9);
-              if (among_var) {
-                sbp.bra = sbp.cursor;
-                sbp.limit_backward = v_1;
-                switch (among_var) {
-                  case 1:
-                    v_2 = sbp.limit - sbp.cursor;
-                    if (!sbp.eq_s_b(1, "k")) {
-                      sbp.cursor = sbp.limit - v_2;
-                      sbp.slice_del();
-                    }
-                    break;
-                  case 2:
-                    sbp.slice_del();
-                    sbp.ket = sbp.cursor;
-                    if (sbp.eq_s_b(3, "kse")) {
-                      sbp.bra = sbp.cursor;
-                      sbp.slice_from("ksi");
-                    }
-                    break;
-                  case 3:
-                    sbp.slice_del();
-                    break;
-                  case 4:
-                    if (sbp.find_among_b(a_1, 6))
-                      sbp.slice_del();
-                    break;
-                  case 5:
-                    if (sbp.find_among_b(a_2, 6))
-                      sbp.slice_del();
-                    break;
-                  case 6:
-                    if (sbp.find_among_b(a_3, 2))
-                      sbp.slice_del();
-                    break;
-                }
-              } else
-                sbp.limit_backward = v_1;
-            }
+        /** @return {boolean} */
+        function r_LONG() {
+          // among, line 92
+          if (base.find_among_b(a_5) == 0) {
+            return false;
           }
+          return true;
+        };
 
-          function r_LONG() {
-            return sbp.find_among_b(a_5, 7);
+        /** @return {boolean} */
+        function r_VI() {
+          // (, line 94
+          // literal, line 94
+          if (!(base.eq_s_b("i"))) {
+            return false;
           }
-
-          function r_VI() {
-            return sbp.eq_s_b(1, "i") && sbp.in_grouping_b(g_V2, 97, 246);
+          if (!(base.in_grouping_b(g_V2, 97, 246))) {
+            return false;
           }
+          return true;
+        };
 
-          function r_case_ending() {
-            var among_var, v_1, v_2;
-            if (sbp.cursor >= I_p1) {
-              v_1 = sbp.limit_backward;
-              sbp.limit_backward = I_p1;
-              sbp.ket = sbp.cursor;
-              among_var = sbp.find_among_b(a_6, 30);
-              if (among_var) {
-                sbp.bra = sbp.cursor;
-                sbp.limit_backward = v_1;
-                switch (among_var) {
-                  case 1:
-                    if (!sbp.eq_s_b(1, "a"))
-                      return;
-                    break;
-                  case 2:
-                  case 9:
-                    if (!sbp.eq_s_b(1, "e"))
-                      return;
-                    break;
-                  case 3:
-                    if (!sbp.eq_s_b(1, "i"))
-                      return;
-                    break;
-                  case 4:
-                    if (!sbp.eq_s_b(1, "o"))
-                      return;
-                    break;
-                  case 5:
-                    if (!sbp.eq_s_b(1, "\u00E4"))
-                      return;
-                    break;
-                  case 6:
-                    if (!sbp.eq_s_b(1, "\u00F6"))
-                      return;
-                    break;
-                  case 7:
-                    v_2 = sbp.limit - sbp.cursor;
+        /** @return {boolean} */
+        function r_case_ending() {
+          var /** number */ among_var;
+          // (, line 96
+          // setlimit, line 97
+          if (base.cursor < I_p1) {
+            return false;
+          }
+          var /** number */ v_2 = base.limit_backward;
+          base.limit_backward = I_p1;
+          // (, line 97
+          // [, line 97
+          base.ket = base.cursor;
+          // substring, line 97
+          among_var = base.find_among_b(a_6);
+          if (among_var == 0) {
+            base.limit_backward = v_2;
+            return false;
+          }
+          // ], line 97
+          base.bra = base.cursor;
+          base.limit_backward = v_2;
+          switch (among_var) {
+            case 1:
+              // (, line 99
+              // literal, line 99
+              if (!(base.eq_s_b("a"))) {
+                return false;
+              }
+              break;
+            case 2:
+              // (, line 100
+              // literal, line 100
+              if (!(base.eq_s_b("e"))) {
+                return false;
+              }
+              break;
+            case 3:
+              // (, line 101
+              // literal, line 101
+              if (!(base.eq_s_b("i"))) {
+                return false;
+              }
+              break;
+            case 4:
+              // (, line 102
+              // literal, line 102
+              if (!(base.eq_s_b("o"))) {
+                return false;
+              }
+              break;
+            case 5:
+              // (, line 103
+              // literal, line 103
+              if (!(base.eq_s_b("\u00E4"))) {
+                return false;
+              }
+              break;
+            case 6:
+              // (, line 104
+              // literal, line 104
+              if (!(base.eq_s_b("\u00F6"))) {
+                return false;
+              }
+              break;
+            case 7:
+              // (, line 112
+              // try, line 112
+              var /** number */ v_3 = base.limit - base.cursor;
+              lab0: {
+                // (, line 112
+                // and, line 114
+                var /** number */ v_4 = base.limit - base.cursor;
+                // or, line 113
+                lab1: {
+                  var /** number */ v_5 = base.limit - base.cursor;
+                  lab2: {
+                    // call LONG, line 112
                     if (!r_LONG()) {
-                      sbp.cursor = sbp.limit - v_2;
-                      if (!sbp.eq_s_b(2, "ie")) {
-                        sbp.cursor = sbp.limit - v_2;
-                        break;
-                      }
+                      break lab2;
                     }
-                    sbp.cursor = sbp.limit - v_2;
-                    if (sbp.cursor <= sbp.limit_backward) {
-                      sbp.cursor = sbp.limit - v_2;
-                      break;
-                    }
-                    sbp.cursor--;
-                    sbp.bra = sbp.cursor;
-                    break;
-                  case 8:
-                    if (!sbp.in_grouping_b(g_V1, 97, 246) ||
-                      !sbp.out_grouping_b(g_V1, 97, 246))
-                      return;
-                    break;
-                }
-                sbp.slice_del();
-                B_ending_removed = true;
-              } else
-                sbp.limit_backward = v_1;
-            }
-          }
-
-          function r_other_endings() {
-            var among_var, v_1, v_2;
-            if (sbp.cursor >= I_p2) {
-              v_1 = sbp.limit_backward;
-              sbp.limit_backward = I_p2;
-              sbp.ket = sbp.cursor;
-              among_var = sbp.find_among_b(a_7, 14);
-              if (among_var) {
-                sbp.bra = sbp.cursor;
-                sbp.limit_backward = v_1;
-                if (among_var == 1) {
-                  v_2 = sbp.limit - sbp.cursor;
-                  if (sbp.eq_s_b(2, "po"))
-                    return;
-                  sbp.cursor = sbp.limit - v_2;
-                }
-                sbp.slice_del();
-              } else
-                sbp.limit_backward = v_1;
-            }
-          }
-
-          function r_i_plural() {
-            var v_1;
-            if (sbp.cursor >= I_p1) {
-              v_1 = sbp.limit_backward;
-              sbp.limit_backward = I_p1;
-              sbp.ket = sbp.cursor;
-              if (sbp.find_among_b(a_8, 2)) {
-                sbp.bra = sbp.cursor;
-                sbp.limit_backward = v_1;
-                sbp.slice_del();
-              } else
-                sbp.limit_backward = v_1;
-            }
-          }
-
-          function r_t_plural() {
-            var among_var, v_1, v_2, v_3, v_4, v_5;
-            if (sbp.cursor >= I_p1) {
-              v_1 = sbp.limit_backward;
-              sbp.limit_backward = I_p1;
-              sbp.ket = sbp.cursor;
-              if (sbp.eq_s_b(1, "t")) {
-                sbp.bra = sbp.cursor;
-                v_2 = sbp.limit - sbp.cursor;
-                if (sbp.in_grouping_b(g_V1, 97, 246)) {
-                  sbp.cursor = sbp.limit - v_2;
-                  sbp.slice_del();
-                  sbp.limit_backward = v_1;
-                  v_3 = sbp.limit - sbp.cursor;
-                  if (sbp.cursor >= I_p2) {
-                    sbp.cursor = I_p2;
-                    v_4 = sbp.limit_backward;
-                    sbp.limit_backward = sbp.cursor;
-                    sbp.cursor = sbp.limit - v_3;
-                    sbp.ket = sbp.cursor;
-                    among_var = sbp.find_among_b(a_9, 2);
-                    if (among_var) {
-                      sbp.bra = sbp.cursor;
-                      sbp.limit_backward = v_4;
-                      if (among_var == 1) {
-                        v_5 = sbp.limit - sbp.cursor;
-                        if (sbp.eq_s_b(2, "po"))
-                          return;
-                        sbp.cursor = sbp.limit - v_5;
-                      }
-                      sbp.slice_del();
-                      return;
-                    }
+                    break lab1;
+                  }
+                  base.cursor = base.limit - v_5;
+                  // literal, line 113
+                  if (!(base.eq_s_b("ie"))) {
+                    base.cursor = base.limit - v_3;
+                    break lab0;
                   }
                 }
-              }
-              sbp.limit_backward = v_1;
-            }
-          }
-
-          function r_tidy() {
-            var v_1, v_2, v_3, v_4;
-            if (sbp.cursor >= I_p1) {
-              v_1 = sbp.limit_backward;
-              sbp.limit_backward = I_p1;
-              v_2 = sbp.limit - sbp.cursor;
-              if (r_LONG()) {
-                sbp.cursor = sbp.limit - v_2;
-                sbp.ket = sbp.cursor;
-                if (sbp.cursor > sbp.limit_backward) {
-                  sbp.cursor--;
-                  sbp.bra = sbp.cursor;
-                  sbp.slice_del();
+                base.cursor = base.limit - v_4;
+                // next, line 114
+                if (base.cursor <= base.limit_backward) {
+                  base.cursor = base.limit - v_3;
+                  break lab0;
                 }
+                base.cursor--;
+                // ], line 114
+                base.bra = base.cursor;
               }
-              sbp.cursor = sbp.limit - v_2;
-              sbp.ket = sbp.cursor;
-              if (sbp.in_grouping_b(g_AEI, 97, 228)) {
-                sbp.bra = sbp.cursor;
-                if (sbp.out_grouping_b(g_V1, 97, 246))
-                  sbp.slice_del();
+              break;
+            case 8:
+              // (, line 120
+              if (!(base.in_grouping_b(g_V1, 97, 246))) {
+                return false;
               }
-              sbp.cursor = sbp.limit - v_2;
-              sbp.ket = sbp.cursor;
-              if (sbp.eq_s_b(1, "j")) {
-                sbp.bra = sbp.cursor;
-                v_3 = sbp.limit - sbp.cursor;
-                if (!sbp.eq_s_b(1, "o")) {
-                  sbp.cursor = sbp.limit - v_3;
-                  if (sbp.eq_s_b(1, "u"))
-                    sbp.slice_del();
-                } else
-                  sbp.slice_del();
+              if (!(base.in_grouping_b(g_C, 98, 122))) {
+                return false;
               }
-              sbp.cursor = sbp.limit - v_2;
-              sbp.ket = sbp.cursor;
-              if (sbp.eq_s_b(1, "o")) {
-                sbp.bra = sbp.cursor;
-                if (sbp.eq_s_b(1, "j"))
-                  sbp.slice_del();
-              }
-              sbp.cursor = sbp.limit - v_2;
-              sbp.limit_backward = v_1;
-              while (true) {
-                v_4 = sbp.limit - sbp.cursor;
-                if (sbp.out_grouping_b(g_V1, 97, 246)) {
-                  sbp.cursor = sbp.limit - v_4;
-                  break;
-                }
-                sbp.cursor = sbp.limit - v_4;
-                if (sbp.cursor <= sbp.limit_backward)
-                  return;
-                sbp.cursor--;
-              }
-              sbp.ket = sbp.cursor;
-              if (sbp.cursor > sbp.limit_backward) {
-                sbp.cursor--;
-                sbp.bra = sbp.cursor;
-                S_x = sbp.slice_to();
-                if (sbp.eq_v_b(S_x))
-                  sbp.slice_del();
-              }
-            }
+              break;
           }
-          this.stem = function() {
-            var v_1 = sbp.cursor;
-            r_mark_regions();
-            B_ending_removed = false;
-            sbp.limit_backward = v_1;
-            sbp.cursor = sbp.limit;
-            r_particle_etc();
-            sbp.cursor = sbp.limit;
-            r_possessive();
-            sbp.cursor = sbp.limit;
-            r_case_ending();
-            sbp.cursor = sbp.limit;
-            r_other_endings();
-            sbp.cursor = sbp.limit;
-            if (B_ending_removed) {
-              r_i_plural();
-              sbp.cursor = sbp.limit;
-            } else {
-              sbp.cursor = sbp.limit;
-              r_t_plural();
-              sbp.cursor = sbp.limit;
-            }
-            r_tidy();
-            return true;
+          // delete, line 139
+          if (!base.slice_del()) {
+            return false;
           }
+          // set ending_removed, line 140
+          B_ending_removed = true;
+          return true;
         };
+
+        /** @return {boolean} */
+        function r_other_endings() {
+          var /** number */ among_var;
+          // (, line 142
+          // setlimit, line 143
+          if (base.cursor < I_p2) {
+            return false;
+          }
+          var /** number */ v_2 = base.limit_backward;
+          base.limit_backward = I_p2;
+          // (, line 143
+          // [, line 143
+          base.ket = base.cursor;
+          // substring, line 143
+          among_var = base.find_among_b(a_7);
+          if (among_var == 0) {
+            base.limit_backward = v_2;
+            return false;
+          }
+          // ], line 143
+          base.bra = base.cursor;
+          base.limit_backward = v_2;
+          switch (among_var) {
+            case 1:
+              // (, line 147
+              // not, line 147
+              {
+                var /** number */ v_3 = base.limit - base.cursor;
+                lab0: {
+                  // literal, line 147
+                  if (!(base.eq_s_b("po"))) {
+                    break lab0;
+                  }
+                  return false;
+                }
+                base.cursor = base.limit - v_3;
+              }
+              break;
+          }
+          // delete, line 152
+          if (!base.slice_del()) {
+            return false;
+          }
+          return true;
+        };
+
+        /** @return {boolean} */
+        function r_i_plural() {
+          // (, line 154
+          // setlimit, line 155
+          if (base.cursor < I_p1) {
+            return false;
+          }
+          var /** number */ v_2 = base.limit_backward;
+          base.limit_backward = I_p1;
+          // (, line 155
+          // [, line 155
+          base.ket = base.cursor;
+          // substring, line 155
+          if (base.find_among_b(a_8) == 0) {
+            base.limit_backward = v_2;
+            return false;
+          }
+          // ], line 155
+          base.bra = base.cursor;
+          base.limit_backward = v_2;
+          // delete, line 159
+          if (!base.slice_del()) {
+            return false;
+          }
+          return true;
+        };
+
+        /** @return {boolean} */
+        function r_t_plural() {
+          var /** number */ among_var;
+          // (, line 161
+          // setlimit, line 162
+          if (base.cursor < I_p1) {
+            return false;
+          }
+          var /** number */ v_2 = base.limit_backward;
+          base.limit_backward = I_p1;
+          // (, line 162
+          // [, line 163
+          base.ket = base.cursor;
+          // literal, line 163
+          if (!(base.eq_s_b("t"))) {
+            base.limit_backward = v_2;
+            return false;
+          }
+          // ], line 163
+          base.bra = base.cursor;
+          // test, line 163
+          var /** number */ v_3 = base.limit - base.cursor;
+          if (!(base.in_grouping_b(g_V1, 97, 246))) {
+            base.limit_backward = v_2;
+            return false;
+          }
+          base.cursor = base.limit - v_3;
+          // delete, line 164
+          if (!base.slice_del()) {
+            return false;
+          }
+          base.limit_backward = v_2;
+          // setlimit, line 166
+          if (base.cursor < I_p2) {
+            return false;
+          }
+          var /** number */ v_5 = base.limit_backward;
+          base.limit_backward = I_p2;
+          // (, line 166
+          // [, line 166
+          base.ket = base.cursor;
+          // substring, line 166
+          among_var = base.find_among_b(a_9);
+          if (among_var == 0) {
+            base.limit_backward = v_5;
+            return false;
+          }
+          // ], line 166
+          base.bra = base.cursor;
+          base.limit_backward = v_5;
+          switch (among_var) {
+            case 1:
+              // (, line 168
+              // not, line 168
+              {
+                var /** number */ v_6 = base.limit - base.cursor;
+                lab0: {
+                  // literal, line 168
+                  if (!(base.eq_s_b("po"))) {
+                    break lab0;
+                  }
+                  return false;
+                }
+                base.cursor = base.limit - v_6;
+              }
+              break;
+          }
+          // delete, line 171
+          if (!base.slice_del()) {
+            return false;
+          }
+          return true;
+        };
+
+        /** @return {boolean} */
+        function r_tidy() {
+          // (, line 173
+          // setlimit, line 174
+          if (base.cursor < I_p1) {
+            return false;
+          }
+          var /** number */ v_2 = base.limit_backward;
+          base.limit_backward = I_p1;
+          // (, line 174
+          // do, line 175
+          var /** number */ v_3 = base.limit - base.cursor;
+          lab0: {
+            // (, line 175
+            // and, line 175
+            var /** number */ v_4 = base.limit - base.cursor;
+            // call LONG, line 175
+            if (!r_LONG()) {
+              break lab0;
+            }
+            base.cursor = base.limit - v_4;
+            // (, line 175
+            // [, line 175
+            base.ket = base.cursor;
+            // next, line 175
+            if (base.cursor <= base.limit_backward) {
+              break lab0;
+            }
+            base.cursor--;
+            // ], line 175
+            base.bra = base.cursor;
+            // delete, line 175
+            if (!base.slice_del()) {
+              return false;
+            }
+          }
+          base.cursor = base.limit - v_3;
+          // do, line 176
+          var /** number */ v_5 = base.limit - base.cursor;
+          lab1: {
+            // (, line 176
+            // [, line 176
+            base.ket = base.cursor;
+            if (!(base.in_grouping_b(g_AEI, 97, 228))) {
+              break lab1;
+            }
+            // ], line 176
+            base.bra = base.cursor;
+            if (!(base.in_grouping_b(g_C, 98, 122))) {
+              break lab1;
+            }
+            // delete, line 176
+            if (!base.slice_del()) {
+              return false;
+            }
+          }
+          base.cursor = base.limit - v_5;
+          // do, line 177
+          var /** number */ v_6 = base.limit - base.cursor;
+          lab2: {
+            // (, line 177
+            // [, line 177
+            base.ket = base.cursor;
+            // literal, line 177
+            if (!(base.eq_s_b("j"))) {
+              break lab2;
+            }
+            // ], line 177
+            base.bra = base.cursor;
+            // or, line 177
+            lab3: {
+              var /** number */ v_7 = base.limit - base.cursor;
+              lab4: {
+                // literal, line 177
+                if (!(base.eq_s_b("o"))) {
+                  break lab4;
+                }
+                break lab3;
+              }
+              base.cursor = base.limit - v_7;
+              // literal, line 177
+              if (!(base.eq_s_b("u"))) {
+                break lab2;
+              }
+            }
+            // delete, line 177
+            if (!base.slice_del()) {
+              return false;
+            }
+          }
+          base.cursor = base.limit - v_6;
+          // do, line 178
+          var /** number */ v_8 = base.limit - base.cursor;
+          lab5: {
+            // (, line 178
+            // [, line 178
+            base.ket = base.cursor;
+            // literal, line 178
+            if (!(base.eq_s_b("o"))) {
+              break lab5;
+            }
+            // ], line 178
+            base.bra = base.cursor;
+            // literal, line 178
+            if (!(base.eq_s_b("j"))) {
+              break lab5;
+            }
+            // delete, line 178
+            if (!base.slice_del()) {
+              return false;
+            }
+          }
+          base.cursor = base.limit - v_8;
+          base.limit_backward = v_2;
+          // goto, line 180
+          golab6: while (true) {
+            var /** number */ v_9 = base.limit - base.cursor;
+            lab7: {
+              if (!(base.out_grouping_b(g_V1, 97, 246))) {
+                break lab7;
+              }
+              base.cursor = base.limit - v_9;
+              break golab6;
+            }
+            base.cursor = base.limit - v_9;
+            if (base.cursor <= base.limit_backward) {
+              return false;
+            }
+            base.cursor--;
+          }
+          // [, line 180
+          base.ket = base.cursor;
+          if (!(base.in_grouping_b(g_C, 98, 122))) {
+            return false;
+          }
+          // ], line 180
+          base.bra = base.cursor;
+          // -> x, line 180
+          S_x = base.slice_to();
+          if (S_x == '') {
+            return false;
+          }
+          // name x, line 180
+          if (!(base.eq_s_b(S_x))) {
+            return false;
+          }
+          // delete, line 180
+          if (!base.slice_del()) {
+            return false;
+          }
+          return true;
+        };
+
+        this.stem = /** @return {boolean} */ function() {
+          // (, line 184
+          // do, line 186
+          var /** number */ v_1 = base.cursor;
+          lab0: {
+            // call mark_regions, line 186
+            if (!r_mark_regions()) {
+              break lab0;
+            }
+          }
+          base.cursor = v_1;
+          // unset ending_removed, line 187
+          B_ending_removed = false;
+          // backwards, line 188
+          base.limit_backward = base.cursor;
+          base.cursor = base.limit;
+          // (, line 188
+          // do, line 189
+          var /** number */ v_2 = base.limit - base.cursor;
+          lab1: {
+            // call particle_etc, line 189
+            if (!r_particle_etc()) {
+              break lab1;
+            }
+          }
+          base.cursor = base.limit - v_2;
+          // do, line 190
+          var /** number */ v_3 = base.limit - base.cursor;
+          lab2: {
+            // call possessive, line 190
+            if (!r_possessive()) {
+              break lab2;
+            }
+          }
+          base.cursor = base.limit - v_3;
+          // do, line 191
+          var /** number */ v_4 = base.limit - base.cursor;
+          lab3: {
+            // call case_ending, line 191
+            if (!r_case_ending()) {
+              break lab3;
+            }
+          }
+          base.cursor = base.limit - v_4;
+          // do, line 192
+          var /** number */ v_5 = base.limit - base.cursor;
+          lab4: {
+            // call other_endings, line 192
+            if (!r_other_endings()) {
+              break lab4;
+            }
+          }
+          base.cursor = base.limit - v_5;
+          // or, line 193
+          lab5: {
+            lab6: {
+              // (, line 193
+              // Boolean test ending_removed, line 193
+              if (!B_ending_removed) {
+                break lab6;
+              }
+              // do, line 193
+              var /** number */ v_7 = base.limit - base.cursor;
+              lab7: {
+                // call i_plural, line 193
+                if (!r_i_plural()) {
+                  break lab7;
+                }
+              }
+              base.cursor = base.limit - v_7;
+              break lab5;
+            }
+            // do, line 193
+            var /** number */ v_8 = base.limit - base.cursor;
+            lab8: {
+              // call t_plural, line 193
+              if (!r_t_plural()) {
+                break lab8;
+              }
+            }
+            base.cursor = base.limit - v_8;
+          }
+          // do, line 194
+          var /** number */ v_9 = base.limit - base.cursor;
+          lab9: {
+            // call tidy, line 194
+            if (!r_tidy()) {
+              break lab9;
+            }
+          }
+          base.cursor = base.limit - v_9;
+          base.cursor = base.limit_backward;
+          return true;
+        };
+
+        /**@return{string}*/
+        this['stemWord'] = function( /**string*/ word) {
+          base.setCurrent(word);
+          this.stem();
+          return base.getCurrent();
+        };
+      };;
 
       /* and return a function that stems a word for the current locale */
       return function(token) {
         // for lunr version 2
         if (typeof token.update === "function") {
           return token.update(function(word) {
-            st.setCurrent(word);
-            st.stem();
-            return st.getCurrent();
+            return st.stemWord(word);
           })
         } else { // for lunr version <= 1
-          st.setCurrent(token);
-          st.stem();
-          return st.getCurrent();
+          return st.stemWord(token);
         }
       }
     })();
 
     lunr.Pipeline.registerFunction(lunr.fi.stemmer, 'stemmer-fi');
 
-    lunr.fi.stopWordFilter = lunr.generateStopWordFilter('ei eivät emme en et ette että he heidän heidät heihin heille heillä heiltä heissä heistä heitä hän häneen hänelle hänellä häneltä hänen hänessä hänestä hänet häntä itse ja johon joiden joihin joiksi joilla joille joilta joina joissa joista joita joka joksi jolla jolle jolta jona jonka jos jossa josta jota jotka kanssa keiden keihin keiksi keille keillä keiltä keinä keissä keistä keitä keneen keneksi kenelle kenellä keneltä kenen kenenä kenessä kenestä kenet ketkä ketkä ketä koska kuin kuka kun me meidän meidät meihin meille meillä meiltä meissä meistä meitä mihin miksi mikä mille millä miltä minkä minkä minua minulla minulle minulta minun minussa minusta minut minuun minä minä missä mistä mitkä mitä mukaan mutta ne niiden niihin niiksi niille niillä niiltä niin niin niinä niissä niistä niitä noiden noihin noiksi noilla noille noilta noin noina noissa noista noita nuo nyt näiden näihin näiksi näille näillä näiltä näinä näissä näistä näitä nämä ole olemme olen olet olette oli olimme olin olisi olisimme olisin olisit olisitte olisivat olit olitte olivat olla olleet ollut on ovat poikki se sekä sen siihen siinä siitä siksi sille sillä sillä siltä sinua sinulla sinulle sinulta sinun sinussa sinusta sinut sinuun sinä sinä sitä tai te teidän teidät teihin teille teillä teiltä teissä teistä teitä tuo tuohon tuoksi tuolla tuolle tuolta tuon tuona tuossa tuosta tuota tähän täksi tälle tällä tältä tämä tämän tänä tässä tästä tätä vaan vai vaikka yli'.split(' '));
+    lunr.fi.stopWordFilter = lunr.generateStopWordFilter("ei eivät emme en et ette että he heidän heidät heihin heille heillä heiltä heissä heistä heitä hän häneen hänelle hänellä häneltä hänen hänessä hänestä hänet häntä itse ja johon joiden joihin joiksi joilla joille joilta joina joissa joista joita joka joksi jolla jolle jolta jona jonka jos jossa josta jota jotka kanssa keiden keihin keiksi keille keillä keiltä keinä keissä keistä keitä keneen keneksi kenelle kenellä keneltä kenen kenenä kenessä kenestä kenet ketkä ketkä ketä koska kuin kuka kun me meidän meidät meihin meille meillä meiltä meissä meistä meitä mihin miksi mikä mille millä miltä minkä minkä minua minulla minulle minulta minun minussa minusta minut minuun minä minä missä mistä mitkä mitä mukaan mutta ne niiden niihin niiksi niille niillä niiltä niin niin niinä niissä niistä niitä noiden noihin noiksi noilla noille noilta noin noina noissa noista noita nuo nyt näiden näihin näiksi näille näillä näiltä näinä näissä näistä näitä nämä ole olemme olen olet olette oli olimme olin olisi olisimme olisin olisit olisitte olisivat olit olitte olivat olla olleet ollut on ovat poikki se sekä sen siihen siinä siitä siksi sille sillä sillä siltä sinua sinulla sinulle sinulta sinun sinussa sinusta sinut sinuun sinä sinä sitä tai te teidän teidät teihin teille teillä teiltä teissä teistä teitä tuo tuohon tuoksi tuolla tuolle tuolta tuon tuona tuossa tuosta tuota tähän täksi tälle tällä tältä tämä tämän tänä tässä tästä tätä vaan vai vaikka yli".split(' '));
 
     lunr.Pipeline.registerFunction(lunr.fi.stopWordFilter, 'stopWordFilter-fi');
   };

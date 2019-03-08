@@ -1,5 +1,5 @@
 /*!
- * Lunr languages, `Swedish` language
+ * Lunr languages, `swedish-stemmer.js` language
  * https://github.com/MihaiValentin/lunr-languages
  *
  * Copyright 2014, Mihai Valentin
@@ -79,177 +79,336 @@
     /* lunr stemmer function */
     lunr.sv.stemmer = (function() {
       /* create the wrapped stemmer object */
-      var Among = lunr.stemmerSupport.Among,
-        SnowballProgram = lunr.stemmerSupport.SnowballProgram,
-        st = new function SwedishStemmer() {
-          var a_0 = [new Among("a", -1, 1), new Among("arna", 0, 1),
-              new Among("erna", 0, 1), new Among("heterna", 2, 1),
-              new Among("orna", 0, 1), new Among("ad", -1, 1),
-              new Among("e", -1, 1), new Among("ade", 6, 1),
-              new Among("ande", 6, 1), new Among("arne", 6, 1),
-              new Among("are", 6, 1), new Among("aste", 6, 1),
-              new Among("en", -1, 1), new Among("anden", 12, 1),
-              new Among("aren", 12, 1), new Among("heten", 12, 1),
-              new Among("ern", -1, 1), new Among("ar", -1, 1),
-              new Among("er", -1, 1), new Among("heter", 18, 1),
-              new Among("or", -1, 1), new Among("s", -1, 2),
-              new Among("as", 21, 1), new Among("arnas", 22, 1),
-              new Among("ernas", 22, 1), new Among("ornas", 22, 1),
-              new Among("es", 21, 1), new Among("ades", 26, 1),
-              new Among("andes", 26, 1), new Among("ens", 21, 1),
-              new Among("arens", 29, 1), new Among("hetens", 29, 1),
-              new Among("erns", 21, 1), new Among("at", -1, 1),
-              new Among("andet", -1, 1), new Among("het", -1, 1),
-              new Among("ast", -1, 1)
-            ],
-            a_1 = [new Among("dd", -1, -1),
-              new Among("gd", -1, -1), new Among("nn", -1, -1),
-              new Among("dt", -1, -1), new Among("gt", -1, -1),
-              new Among("kt", -1, -1), new Among("tt", -1, -1)
-            ],
-            a_2 = [
-              new Among("ig", -1, 1), new Among("lig", 0, 1),
-              new Among("els", -1, 1), new Among("fullt", -1, 3),
-              new Among("l\u00F6st", -1, 2)
-            ],
-            g_v = [17, 65, 16, 1, 0, 0, 0, 0,
-              0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 32
-            ],
-            g_s_ending = [119, 127, 149],
-            I_x, I_p1, sbp = new SnowballProgram();
-          this.setCurrent = function(word) {
-            sbp.setCurrent(word);
-          };
-          this.getCurrent = function() {
-            return sbp.getCurrent();
-          };
+      var st = new function() {
+        var base = new BaseStemmer();
+        /** @const */
+        var a_0 = [
+          ["a", -1, 1],
+          ["arna", 0, 1],
+          ["erna", 0, 1],
+          ["heterna", 2, 1],
+          ["orna", 0, 1],
+          ["ad", -1, 1],
+          ["e", -1, 1],
+          ["ade", 6, 1],
+          ["ande", 6, 1],
+          ["arne", 6, 1],
+          ["are", 6, 1],
+          ["aste", 6, 1],
+          ["en", -1, 1],
+          ["anden", 12, 1],
+          ["aren", 12, 1],
+          ["heten", 12, 1],
+          ["ern", -1, 1],
+          ["ar", -1, 1],
+          ["er", -1, 1],
+          ["heter", 18, 1],
+          ["or", -1, 1],
+          ["s", -1, 2],
+          ["as", 21, 1],
+          ["arnas", 22, 1],
+          ["ernas", 22, 1],
+          ["ornas", 22, 1],
+          ["es", 21, 1],
+          ["ades", 26, 1],
+          ["andes", 26, 1],
+          ["ens", 21, 1],
+          ["arens", 29, 1],
+          ["hetens", 29, 1],
+          ["erns", 21, 1],
+          ["at", -1, 1],
+          ["andet", -1, 1],
+          ["het", -1, 1],
+          ["ast", -1, 1]
+        ];
 
-          function r_mark_regions() {
-            var v_1, c = sbp.cursor + 3;
-            I_p1 = sbp.limit;
-            if (0 <= c || c <= sbp.limit) {
-              I_x = c;
-              while (true) {
-                v_1 = sbp.cursor;
-                if (sbp.in_grouping(g_v, 97, 246)) {
-                  sbp.cursor = v_1;
-                  break;
-                }
-                sbp.cursor = v_1;
-                if (sbp.cursor >= sbp.limit)
-                  return;
-                sbp.cursor++;
-              }
-              while (!sbp.out_grouping(g_v, 97, 246)) {
-                if (sbp.cursor >= sbp.limit)
-                  return;
-                sbp.cursor++;
-              }
-              I_p1 = sbp.cursor;
-              if (I_p1 < I_x)
-                I_p1 = I_x;
-            }
-          }
+        /** @const */
+        var a_1 = [
+          ["dd", -1, -1],
+          ["gd", -1, -1],
+          ["nn", -1, -1],
+          ["dt", -1, -1],
+          ["gt", -1, -1],
+          ["kt", -1, -1],
+          ["tt", -1, -1]
+        ];
 
-          function r_main_suffix() {
-            var among_var, v_2 = sbp.limit_backward;
-            if (sbp.cursor >= I_p1) {
-              sbp.limit_backward = I_p1;
-              sbp.cursor = sbp.limit;
-              sbp.ket = sbp.cursor;
-              among_var = sbp.find_among_b(a_0, 37);
-              sbp.limit_backward = v_2;
-              if (among_var) {
-                sbp.bra = sbp.cursor;
-                switch (among_var) {
-                  case 1:
-                    sbp.slice_del();
-                    break;
-                  case 2:
-                    if (sbp.in_grouping_b(g_s_ending, 98, 121))
-                      sbp.slice_del();
-                    break;
-                }
-              }
-            }
-          }
+        /** @const */
+        var a_2 = [
+          ["ig", -1, 1],
+          ["lig", 0, 1],
+          ["els", -1, 1],
+          ["fullt", -1, 3],
+          ["l\u00F6st", -1, 2]
+        ];
 
-          function r_consonant_pair() {
-            var v_1 = sbp.limit_backward;
-            if (sbp.cursor >= I_p1) {
-              sbp.limit_backward = I_p1;
-              sbp.cursor = sbp.limit;
-              if (sbp.find_among_b(a_1, 7)) {
-                sbp.cursor = sbp.limit;
-                sbp.ket = sbp.cursor;
-                if (sbp.cursor > sbp.limit_backward) {
-                  sbp.bra = --sbp.cursor;
-                  sbp.slice_del();
-                }
-              }
-              sbp.limit_backward = v_1;
-            }
-          }
+        /** @const */
+        var /** Array<int> */ g_v = [17, 65, 16, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 32];
 
-          function r_other_suffix() {
-            var among_var, v_2;
-            if (sbp.cursor >= I_p1) {
-              v_2 = sbp.limit_backward;
-              sbp.limit_backward = I_p1;
-              sbp.cursor = sbp.limit;
-              sbp.ket = sbp.cursor;
-              among_var = sbp.find_among_b(a_2, 5);
-              if (among_var) {
-                sbp.bra = sbp.cursor;
-                switch (among_var) {
-                  case 1:
-                    sbp.slice_del();
-                    break;
-                  case 2:
-                    sbp.slice_from("l\u00F6s");
-                    break;
-                  case 3:
-                    sbp.slice_from("full");
-                    break;
-                }
-              }
-              sbp.limit_backward = v_2;
+        /** @const */
+        var /** Array<int> */ g_s_ending = [119, 127, 149];
+
+        var /** number */ I_x = 0;
+        var /** number */ I_p1 = 0;
+
+
+        /** @return {boolean} */
+        function r_mark_regions() {
+          // (, line 26
+          I_p1 = base.limit;
+          // test, line 29
+          var /** number */ v_1 = base.cursor;
+          // (, line 29
+          // hop, line 29
+          {
+            var /** number */ c1 = base.cursor + 3;
+            if (0 > c1 || c1 > base.limit) {
+              return false;
             }
+            base.cursor = c1;
           }
-          this.stem = function() {
-            var v_1 = sbp.cursor;
-            r_mark_regions();
-            sbp.limit_backward = v_1;
-            sbp.cursor = sbp.limit;
-            r_main_suffix();
-            sbp.cursor = sbp.limit;
-            r_consonant_pair();
-            sbp.cursor = sbp.limit;
-            r_other_suffix();
-            return true;
+          // setmark x, line 29
+          I_x = base.cursor;
+          base.cursor = v_1;
+          // goto, line 30
+          golab0: while (true) {
+            var /** number */ v_2 = base.cursor;
+            lab1: {
+              if (!(base.in_grouping(g_v, 97, 246))) {
+                break lab1;
+              }
+              base.cursor = v_2;
+              break golab0;
+            }
+            base.cursor = v_2;
+            if (base.cursor >= base.limit) {
+              return false;
+            }
+            base.cursor++;
           }
+          // gopast, line 30
+          golab2: while (true) {
+            lab3: {
+              if (!(base.out_grouping(g_v, 97, 246))) {
+                break lab3;
+              }
+              break golab2;
+            }
+            if (base.cursor >= base.limit) {
+              return false;
+            }
+            base.cursor++;
+          }
+          // setmark p1, line 30
+          I_p1 = base.cursor;
+          // try, line 31
+          lab4: {
+            // (, line 31
+            if (!(I_p1 < I_x)) {
+              break lab4;
+            }
+            I_p1 = I_x;
+          }
+          return true;
         };
+
+        /** @return {boolean} */
+        function r_main_suffix() {
+          var /** number */ among_var;
+          // (, line 36
+          // setlimit, line 37
+          if (base.cursor < I_p1) {
+            return false;
+          }
+          var /** number */ v_2 = base.limit_backward;
+          base.limit_backward = I_p1;
+          // (, line 37
+          // [, line 37
+          base.ket = base.cursor;
+          // substring, line 37
+          among_var = base.find_among_b(a_0);
+          if (among_var == 0) {
+            base.limit_backward = v_2;
+            return false;
+          }
+          // ], line 37
+          base.bra = base.cursor;
+          base.limit_backward = v_2;
+          switch (among_var) {
+            case 1:
+              // (, line 44
+              // delete, line 44
+              if (!base.slice_del()) {
+                return false;
+              }
+              break;
+            case 2:
+              // (, line 46
+              if (!(base.in_grouping_b(g_s_ending, 98, 121))) {
+                return false;
+              }
+              // delete, line 46
+              if (!base.slice_del()) {
+                return false;
+              }
+              break;
+          }
+          return true;
+        };
+
+        /** @return {boolean} */
+        function r_consonant_pair() {
+          // setlimit, line 50
+          if (base.cursor < I_p1) {
+            return false;
+          }
+          var /** number */ v_2 = base.limit_backward;
+          base.limit_backward = I_p1;
+          // (, line 50
+          // and, line 52
+          var /** number */ v_3 = base.limit - base.cursor;
+          // among, line 51
+          if (base.find_among_b(a_1) == 0) {
+            base.limit_backward = v_2;
+            return false;
+          }
+          base.cursor = base.limit - v_3;
+          // (, line 52
+          // [, line 52
+          base.ket = base.cursor;
+          // next, line 52
+          if (base.cursor <= base.limit_backward) {
+            base.limit_backward = v_2;
+            return false;
+          }
+          base.cursor--;
+          // ], line 52
+          base.bra = base.cursor;
+          // delete, line 52
+          if (!base.slice_del()) {
+            return false;
+          }
+          base.limit_backward = v_2;
+          return true;
+        };
+
+        /** @return {boolean} */
+        function r_other_suffix() {
+          var /** number */ among_var;
+          // setlimit, line 55
+          if (base.cursor < I_p1) {
+            return false;
+          }
+          var /** number */ v_2 = base.limit_backward;
+          base.limit_backward = I_p1;
+          // (, line 55
+          // [, line 56
+          base.ket = base.cursor;
+          // substring, line 56
+          among_var = base.find_among_b(a_2);
+          if (among_var == 0) {
+            base.limit_backward = v_2;
+            return false;
+          }
+          // ], line 56
+          base.bra = base.cursor;
+          switch (among_var) {
+            case 1:
+              // (, line 57
+              // delete, line 57
+              if (!base.slice_del()) {
+                return false;
+              }
+              break;
+            case 2:
+              // (, line 58
+              // <-, line 58
+              if (!base.slice_from("l\u00F6s")) {
+                return false;
+              }
+              break;
+            case 3:
+              // (, line 59
+              // <-, line 59
+              if (!base.slice_from("full")) {
+                return false;
+              }
+              break;
+          }
+          base.limit_backward = v_2;
+          return true;
+        };
+
+        this.stem = /** @return {boolean} */ function() {
+          // (, line 64
+          // do, line 66
+          var /** number */ v_1 = base.cursor;
+          lab0: {
+            // call mark_regions, line 66
+            if (!r_mark_regions()) {
+              break lab0;
+            }
+          }
+          base.cursor = v_1;
+          // backwards, line 67
+          base.limit_backward = base.cursor;
+          base.cursor = base.limit;
+          // (, line 67
+          // do, line 68
+          var /** number */ v_2 = base.limit - base.cursor;
+          lab1: {
+            // call main_suffix, line 68
+            if (!r_main_suffix()) {
+              break lab1;
+            }
+          }
+          base.cursor = base.limit - v_2;
+          // do, line 69
+          var /** number */ v_3 = base.limit - base.cursor;
+          lab2: {
+            // call consonant_pair, line 69
+            if (!r_consonant_pair()) {
+              break lab2;
+            }
+          }
+          base.cursor = base.limit - v_3;
+          // do, line 70
+          var /** number */ v_4 = base.limit - base.cursor;
+          lab3: {
+            // call other_suffix, line 70
+            if (!r_other_suffix()) {
+              break lab3;
+            }
+          }
+          base.cursor = base.limit - v_4;
+          base.cursor = base.limit_backward;
+          return true;
+        };
+
+        /**@return{string}*/
+        this['stemWord'] = function( /**string*/ word) {
+          base.setCurrent(word);
+          this.stem();
+          return base.getCurrent();
+        };
+      };;
 
       /* and return a function that stems a word for the current locale */
       return function(token) {
         // for lunr version 2
         if (typeof token.update === "function") {
           return token.update(function(word) {
-            st.setCurrent(word);
-            st.stem();
-            return st.getCurrent();
+            return st.stemWord(word);
           })
         } else { // for lunr version <= 1
-          st.setCurrent(token);
-          st.stem();
-          return st.getCurrent();
+          return st.stemWord(token);
         }
       }
     })();
 
     lunr.Pipeline.registerFunction(lunr.sv.stemmer, 'stemmer-sv');
 
-    lunr.sv.stopWordFilter = lunr.generateStopWordFilter('alla allt att av blev bli blir blivit de dem den denna deras dess dessa det detta dig din dina ditt du där då efter ej eller en er era ert ett från för ha hade han hans har henne hennes hon honom hur här i icke ingen inom inte jag ju kan kunde man med mellan men mig min mina mitt mot mycket ni nu när någon något några och om oss på samma sedan sig sin sina sitta själv skulle som så sådan sådana sådant till under upp ut utan vad var vara varför varit varje vars vart vem vi vid vilka vilkas vilken vilket vår våra vårt än är åt över'.split(' '));
+    lunr.sv.stopWordFilter = lunr.generateStopWordFilter("alla allt att av blev bli blir blivit de dem den denna deras dess dessa det detta dig din dina ditt du där då efter ej eller en er era ert ett från för ha hade han hans har henne hennes hon honom hur här i icke ingen inom inte jag ju kan kunde man med mellan men mig min mina mitt mot mycket ni nu när någon något några och om oss på samma sedan sig sin sina sitta själv skulle som så sådan sådana sådant till under upp ut utan vad var vara varför varit varje vars vart vem vi vid vilka vilkas vilken vilket vår våra vårt än är åt över".split(' '));
 
     lunr.Pipeline.registerFunction(lunr.sv.stopWordFilter, 'stopWordFilter-sv');
   };

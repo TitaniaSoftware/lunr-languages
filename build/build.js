@@ -35,101 +35,114 @@ function wordCharacters(script) {
 // list mapping between locale, stemmer file, stopwords file, and char pattern
 var list = [{
     locale: 'ar',
-    file: 'ArabicStemmer.js',
+    file: 'arabic-stemmer.js',
     stopwords: stopwordsCustomFolder + 'ar.csv',
     wordCharacters: wordCharacters('Arabic')
 },{
     locale: 'cs',
-    file: 'CzechStemmer.js',
+    file: 'czech-stemmer.js',
     stopwords: stopwordsCustomFolder + 'cs.csv',
     wordCharacters: wordCharacters('Latin')
 },{
     locale: 'da',
-    file: 'DanishStemmer.js',
+    file: 'danish-stemmer.js',
     stopwords: stopwordsRepoFolder + 'da.csv',
     wordCharacters: wordCharacters('Latin')
 }, {
+    locale: 'de',
+    file: 'german-stemmer.js',
+    stopwords: stopwordsRepoFolder + 'de.csv',
+    wordCharacters: wordCharacters('Latin')
+}, {
     locale: 'el',
-    file: 'GreekStemmer.js',
+    file: 'greek-stemmer.js',
     stopwords: stopwordsCustomFolder + 'el.csv',
     wordCharacters: wordCharacters('Greek')
 }, {
+    locale: 'es',
+    file: 'spanish-stemmer.js',
+    stopwords: stopwordsRepoFolder + 'es.csv',
+    wordCharacters: wordCharacters('Latin')
+}, {
     locale: 'fi',
-    file: 'FinnishStemmer.js',
+    file: 'finnish-stemmer.js',
     stopwords: stopwordsRepoFolder + 'fn.csv',
     wordCharacters: wordCharacters('Latin')
 }, {
     locale: 'fr',
-    file: 'FrenchStemmer.js',
+    file: 'french-stemmer.js',
     stopwords: stopwordsRepoFolder + 'fr.csv',
     wordCharacters: wordCharacters('Latin')
 }, {
-    locale: 'de',
-    file: 'GermanStemmer.js',
-    stopwords: stopwordsRepoFolder + 'de.csv',
+    locale: 'ga',
+    file: 'irish-stemmer.js',
+    stopwords: stopwordsCustomFolder + 'ga.csv',
     wordCharacters: wordCharacters('Latin')
 }, {
     locale: 'hu',
-    file: 'HungarianStemmer.js',
+    file: 'hungarian-stemmer.js',
     stopwords: stopwordsRepoFolder + 'hu.csv',
     wordCharacters: wordCharacters('Latin')
 }, {
     locale: 'id',
-    file: 'IndonesianStemmer.js',
+    file: 'indonesian-stemmer.js',
     stopwords: stopwordsCustomFolder + 'id.csv',
     wordCharacters: wordCharacters('Latin')
 }, {
     locale: 'it',
-    file: 'ItalianStemmer.js',
+    file: 'italian-stemmer.js',
     stopwords: stopwordsRepoFolder + 'it.csv',
     wordCharacters: wordCharacters('Latin')
 }, {
     locale: 'ja'
 }, {
-    locale: 'jp'
-}, {
     locale: 'lt',
-    file: 'LithuanianStemmer.js',
+    file: 'lithuanian-stemmer.js',
     stopwords: stopwordsCustomFolder + 'lt.csv',
     wordCharacters: wordCharacters('Latin')
 }, {
+    locale: 'ne',
+    file: 'nepali-stemmer.js',
+    stopwords: stopwordsCustomFolder + 'ne.csv',
+    wordCharacters: wordCharacters('Devanagari')
+}, {
     locale: 'nl',
-    file: 'DutchStemmer.js',
+    file: 'dutch-stemmer.js',
     stopwords: stopwordsRepoFolder + 'nl.csv',
     wordCharacters: wordCharacters('Latin')
 }, {
     locale: 'no',
-    file: 'NorwegianStemmer.js',
+    file: 'norwegian-stemmer.js',
     stopwords: stopwordsCustomFolder + 'no.csv',
     wordCharacters: wordCharacters('Latin')
 }, {
     locale: 'pt',
-    file: 'PortugueseStemmer.js',
+    file: 'portuguese-stemmer.js',
     stopwords: stopwordsRepoFolder + 'pt.csv',
     wordCharacters: wordCharacters('Latin')
 }, {
     locale: 'ro',
-    file: 'RomanianStemmer.js',
+    file: 'romanian-stemmer.js',
     stopwords: stopwordsCustomFolder + 'ro.csv',
     wordCharacters: wordCharacters('Latin')
 }, {
     locale: 'ru',
-    file: 'RussianStemmer.js',
+    file: 'russian-stemmer.js',
     stopwords: stopwordsCustomFolder + 'ru.csv',
     wordCharacters: wordCharacters('Cyrillic')
 }, {
-    locale: 'es',
-    file: 'SpanishStemmer.js',
-    stopwords: stopwordsRepoFolder + 'es.csv',
-    wordCharacters: wordCharacters('Latin')
-}, {
     locale: 'sv',
-    file: 'SwedishStemmer.js',
+    file: 'swedish-stemmer.js',
     stopwords: stopwordsCustomFolder + 'sv.csv',
     wordCharacters: wordCharacters('Latin')
 }, {
+    locale: 'ta',
+    file: 'tamil-stemmer.js',
+    stopwords: stopwordsCustomFolder + 'ta.csv',
+    wordCharacters: wordCharacters('Tamil')
+}, {
     locale: 'tr',
-    file: 'TurkishStemmer.js',
+    file: 'turkish-stemmer.js',
     stopwords: stopwordsCustomFolder + 'tr.csv',
     wordCharacters: wordCharacters('Latin')
 }, {
@@ -151,7 +164,7 @@ for(var i = 0; i < list.length; i++) {
     var fromTemplate = list[i].file && list[i].stopwords;
 
     if (fromTemplate) {
-        data = fs.readFileSync('build/snowball-js/stemmer/src/ext/' + list[i].file, 'utf8');
+        data = fs.readFileSync('build/snowball/jsstemmer/' + list[i].file, 'utf8');
         stopWords = fs.readFileSync('build/' + list[i].stopwords, 'utf8');
 
         // start replacing the placeholders
@@ -164,7 +177,7 @@ for(var i = 0; i < list.length; i++) {
         f = f.replace(/\{\{languageName\}\}/g, list[i].file.replace(/Stemmer\.js/g, ''));
         f = f.replace(/\{\{wordCharacters\}\}/g, list[i].wordCharacters);
     } else {
-        // beautify andminify languages not generated from the template.
+        // beautify and minify languages not generated from the template.
         f = fs.readFileSync('lunr.' + list[i].locale + '.js', 'utf8');
     }
 
@@ -180,6 +193,10 @@ console.log('Building Stemmer Support');
 // build stemmer support
 var support = fs.readFileSync('lunr.stemmer.support.js', 'utf8');
 fs.writeFile('min/lunr.stemmer.support.min.js', compress(support));
+var baseStemmer = fs.readFileSync('build/snowball/jsstemmer/base-stemmer.js', 'utf8');
+fs.writeFile('base-stemmer.js', baseStemmer);
+fs.writeFile('min/base-stemmer.min.js', compress(baseStemmer));
+
 console.log('Building Multi-Language Extension');
 // build multi
 var multi = fs.readFileSync('lunr.multi.js', 'utf8');

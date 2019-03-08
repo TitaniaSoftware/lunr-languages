@@ -1,5 +1,5 @@
 /*!
- * Lunr languages, `Hungarian` language
+ * Lunr languages, `hungarian-stemmer.js` language
  * https://github.com/MihaiValentin/lunr-languages
  *
  * Copyright 2014, Mihai Valentin
@@ -79,486 +79,864 @@
     /* lunr stemmer function */
     lunr.hu.stemmer = (function() {
       /* create the wrapped stemmer object */
-      var Among = lunr.stemmerSupport.Among,
-        SnowballProgram = lunr.stemmerSupport.SnowballProgram,
-        st = new function HungarianStemmer() {
-          var a_0 = [new Among("cs", -1, -1), new Among("dzs", -1, -1),
-              new Among("gy", -1, -1), new Among("ly", -1, -1),
-              new Among("ny", -1, -1), new Among("sz", -1, -1),
-              new Among("ty", -1, -1), new Among("zs", -1, -1)
-            ],
-            a_1 = [
-              new Among("\u00E1", -1, 1), new Among("\u00E9", -1, 2)
-            ],
-            a_2 = [
-              new Among("bb", -1, -1), new Among("cc", -1, -1),
-              new Among("dd", -1, -1), new Among("ff", -1, -1),
-              new Among("gg", -1, -1), new Among("jj", -1, -1),
-              new Among("kk", -1, -1), new Among("ll", -1, -1),
-              new Among("mm", -1, -1), new Among("nn", -1, -1),
-              new Among("pp", -1, -1), new Among("rr", -1, -1),
-              new Among("ccs", -1, -1), new Among("ss", -1, -1),
-              new Among("zzs", -1, -1), new Among("tt", -1, -1),
-              new Among("vv", -1, -1), new Among("ggy", -1, -1),
-              new Among("lly", -1, -1), new Among("nny", -1, -1),
-              new Among("tty", -1, -1), new Among("ssz", -1, -1),
-              new Among("zz", -1, -1)
-            ],
-            a_3 = [new Among("al", -1, 1),
-              new Among("el", -1, 2)
-            ],
-            a_4 = [new Among("ba", -1, -1),
-              new Among("ra", -1, -1), new Among("be", -1, -1),
-              new Among("re", -1, -1), new Among("ig", -1, -1),
-              new Among("nak", -1, -1), new Among("nek", -1, -1),
-              new Among("val", -1, -1), new Among("vel", -1, -1),
-              new Among("ul", -1, -1), new Among("n\u00E1l", -1, -1),
-              new Among("n\u00E9l", -1, -1), new Among("b\u00F3l", -1, -1),
-              new Among("r\u00F3l", -1, -1), new Among("t\u00F3l", -1, -1),
-              new Among("b\u00F5l", -1, -1), new Among("r\u00F5l", -1, -1),
-              new Among("t\u00F5l", -1, -1), new Among("\u00FCl", -1, -1),
-              new Among("n", -1, -1), new Among("an", 19, -1),
-              new Among("ban", 20, -1), new Among("en", 19, -1),
-              new Among("ben", 22, -1), new Among("k\u00E9ppen", 22, -1),
-              new Among("on", 19, -1), new Among("\u00F6n", 19, -1),
-              new Among("k\u00E9pp", -1, -1), new Among("kor", -1, -1),
-              new Among("t", -1, -1), new Among("at", 29, -1),
-              new Among("et", 29, -1), new Among("k\u00E9nt", 29, -1),
-              new Among("ank\u00E9nt", 32, -1), new Among("enk\u00E9nt", 32, -1),
-              new Among("onk\u00E9nt", 32, -1), new Among("ot", 29, -1),
-              new Among("\u00E9rt", 29, -1), new Among("\u00F6t", 29, -1),
-              new Among("hez", -1, -1), new Among("hoz", -1, -1),
-              new Among("h\u00F6z", -1, -1), new Among("v\u00E1", -1, -1),
-              new Among("v\u00E9", -1, -1)
-            ],
-            a_5 = [new Among("\u00E1n", -1, 2),
-              new Among("\u00E9n", -1, 1), new Among("\u00E1nk\u00E9nt", -1, 3)
-            ],
-            a_6 = [
-              new Among("stul", -1, 2), new Among("astul", 0, 1),
-              new Among("\u00E1stul", 0, 3), new Among("st\u00FCl", -1, 2),
-              new Among("est\u00FCl", 3, 1), new Among("\u00E9st\u00FCl", 3, 4)
-            ],
-            a_7 = [
-              new Among("\u00E1", -1, 1), new Among("\u00E9", -1, 2)
-            ],
-            a_8 = [
-              new Among("k", -1, 7), new Among("ak", 0, 4),
-              new Among("ek", 0, 6), new Among("ok", 0, 5),
-              new Among("\u00E1k", 0, 1), new Among("\u00E9k", 0, 2),
-              new Among("\u00F6k", 0, 3)
-            ],
-            a_9 = [new Among("\u00E9i", -1, 7),
-              new Among("\u00E1\u00E9i", 0, 6), new Among("\u00E9\u00E9i", 0, 5),
-              new Among("\u00E9", -1, 9), new Among("k\u00E9", 3, 4),
-              new Among("ak\u00E9", 4, 1), new Among("ek\u00E9", 4, 1),
-              new Among("ok\u00E9", 4, 1), new Among("\u00E1k\u00E9", 4, 3),
-              new Among("\u00E9k\u00E9", 4, 2), new Among("\u00F6k\u00E9", 4, 1),
-              new Among("\u00E9\u00E9", 3, 8)
-            ],
-            a_10 = [new Among("a", -1, 18),
-              new Among("ja", 0, 17), new Among("d", -1, 16),
-              new Among("ad", 2, 13), new Among("ed", 2, 13),
-              new Among("od", 2, 13), new Among("\u00E1d", 2, 14),
-              new Among("\u00E9d", 2, 15), new Among("\u00F6d", 2, 13),
-              new Among("e", -1, 18), new Among("je", 9, 17),
-              new Among("nk", -1, 4), new Among("unk", 11, 1),
-              new Among("\u00E1nk", 11, 2), new Among("\u00E9nk", 11, 3),
-              new Among("\u00FCnk", 11, 1), new Among("uk", -1, 8),
-              new Among("juk", 16, 7), new Among("\u00E1juk", 17, 5),
-              new Among("\u00FCk", -1, 8), new Among("j\u00FCk", 19, 7),
-              new Among("\u00E9j\u00FCk", 20, 6), new Among("m", -1, 12),
-              new Among("am", 22, 9), new Among("em", 22, 9),
-              new Among("om", 22, 9), new Among("\u00E1m", 22, 10),
-              new Among("\u00E9m", 22, 11), new Among("o", -1, 18),
-              new Among("\u00E1", -1, 19), new Among("\u00E9", -1, 20)
-            ],
-            a_11 = [
-              new Among("id", -1, 10), new Among("aid", 0, 9),
-              new Among("jaid", 1, 6), new Among("eid", 0, 9),
-              new Among("jeid", 3, 6), new Among("\u00E1id", 0, 7),
-              new Among("\u00E9id", 0, 8), new Among("i", -1, 15),
-              new Among("ai", 7, 14), new Among("jai", 8, 11),
-              new Among("ei", 7, 14), new Among("jei", 10, 11),
-              new Among("\u00E1i", 7, 12), new Among("\u00E9i", 7, 13),
-              new Among("itek", -1, 24), new Among("eitek", 14, 21),
-              new Among("jeitek", 15, 20), new Among("\u00E9itek", 14, 23),
-              new Among("ik", -1, 29), new Among("aik", 18, 26),
-              new Among("jaik", 19, 25), new Among("eik", 18, 26),
-              new Among("jeik", 21, 25), new Among("\u00E1ik", 18, 27),
-              new Among("\u00E9ik", 18, 28), new Among("ink", -1, 20),
-              new Among("aink", 25, 17), new Among("jaink", 26, 16),
-              new Among("eink", 25, 17), new Among("jeink", 28, 16),
-              new Among("\u00E1ink", 25, 18), new Among("\u00E9ink", 25, 19),
-              new Among("aitok", -1, 21), new Among("jaitok", 32, 20),
-              new Among("\u00E1itok", -1, 22), new Among("im", -1, 5),
-              new Among("aim", 35, 4), new Among("jaim", 36, 1),
-              new Among("eim", 35, 4), new Among("jeim", 38, 1),
-              new Among("\u00E1im", 35, 2), new Among("\u00E9im", 35, 3)
-            ],
-            g_v = [
-              17, 65, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 17, 52, 14
-            ],
-            I_p1, sbp = new SnowballProgram();
-          this.setCurrent = function(word) {
-            sbp.setCurrent(word);
-          };
-          this.getCurrent = function() {
-            return sbp.getCurrent();
-          };
+      var st = new function() {
+        var base = new BaseStemmer();
+        /** @const */
+        var a_0 = [
+          ["cs", -1, -1],
+          ["dzs", -1, -1],
+          ["gy", -1, -1],
+          ["ly", -1, -1],
+          ["ny", -1, -1],
+          ["sz", -1, -1],
+          ["ty", -1, -1],
+          ["zs", -1, -1]
+        ];
 
-          function r_mark_regions() {
-            var v_1 = sbp.cursor,
-              v_2;
-            I_p1 = sbp.limit;
-            if (sbp.in_grouping(g_v, 97, 252)) {
-              while (true) {
-                v_2 = sbp.cursor;
-                if (sbp.out_grouping(g_v, 97, 252)) {
-                  sbp.cursor = v_2;
-                  if (!sbp.find_among(a_0, 8)) {
-                    sbp.cursor = v_2;
-                    if (v_2 < sbp.limit)
-                      sbp.cursor++;
+        /** @const */
+        var a_1 = [
+          ["\u00E1", -1, 1],
+          ["\u00E9", -1, 2]
+        ];
+
+        /** @const */
+        var a_2 = [
+          ["bb", -1, -1],
+          ["cc", -1, -1],
+          ["dd", -1, -1],
+          ["ff", -1, -1],
+          ["gg", -1, -1],
+          ["jj", -1, -1],
+          ["kk", -1, -1],
+          ["ll", -1, -1],
+          ["mm", -1, -1],
+          ["nn", -1, -1],
+          ["pp", -1, -1],
+          ["rr", -1, -1],
+          ["ccs", -1, -1],
+          ["ss", -1, -1],
+          ["zzs", -1, -1],
+          ["tt", -1, -1],
+          ["vv", -1, -1],
+          ["ggy", -1, -1],
+          ["lly", -1, -1],
+          ["nny", -1, -1],
+          ["tty", -1, -1],
+          ["ssz", -1, -1],
+          ["zz", -1, -1]
+        ];
+
+        /** @const */
+        var a_3 = [
+          ["al", -1, 1],
+          ["el", -1, 1]
+        ];
+
+        /** @const */
+        var a_4 = [
+          ["ba", -1, -1],
+          ["ra", -1, -1],
+          ["be", -1, -1],
+          ["re", -1, -1],
+          ["ig", -1, -1],
+          ["nak", -1, -1],
+          ["nek", -1, -1],
+          ["val", -1, -1],
+          ["vel", -1, -1],
+          ["ul", -1, -1],
+          ["n\u00E1l", -1, -1],
+          ["n\u00E9l", -1, -1],
+          ["b\u00F3l", -1, -1],
+          ["r\u00F3l", -1, -1],
+          ["t\u00F3l", -1, -1],
+          ["\u00FCl", -1, -1],
+          ["b\u0151l", -1, -1],
+          ["r\u0151l", -1, -1],
+          ["t\u0151l", -1, -1],
+          ["n", -1, -1],
+          ["an", 19, -1],
+          ["ban", 20, -1],
+          ["en", 19, -1],
+          ["ben", 22, -1],
+          ["k\u00E9ppen", 22, -1],
+          ["on", 19, -1],
+          ["\u00F6n", 19, -1],
+          ["k\u00E9pp", -1, -1],
+          ["kor", -1, -1],
+          ["t", -1, -1],
+          ["at", 29, -1],
+          ["et", 29, -1],
+          ["k\u00E9nt", 29, -1],
+          ["ank\u00E9nt", 32, -1],
+          ["enk\u00E9nt", 32, -1],
+          ["onk\u00E9nt", 32, -1],
+          ["ot", 29, -1],
+          ["\u00E9rt", 29, -1],
+          ["\u00F6t", 29, -1],
+          ["hez", -1, -1],
+          ["hoz", -1, -1],
+          ["h\u00F6z", -1, -1],
+          ["v\u00E1", -1, -1],
+          ["v\u00E9", -1, -1]
+        ];
+
+        /** @const */
+        var a_5 = [
+          ["\u00E1n", -1, 2],
+          ["\u00E9n", -1, 1],
+          ["\u00E1nk\u00E9nt", -1, 2]
+        ];
+
+        /** @const */
+        var a_6 = [
+          ["stul", -1, 1],
+          ["astul", 0, 1],
+          ["\u00E1stul", 0, 2],
+          ["st\u00FCl", -1, 1],
+          ["est\u00FCl", 3, 1],
+          ["\u00E9st\u00FCl", 3, 3]
+        ];
+
+        /** @const */
+        var a_7 = [
+          ["\u00E1", -1, 1],
+          ["\u00E9", -1, 1]
+        ];
+
+        /** @const */
+        var a_8 = [
+          ["k", -1, 3],
+          ["ak", 0, 3],
+          ["ek", 0, 3],
+          ["ok", 0, 3],
+          ["\u00E1k", 0, 1],
+          ["\u00E9k", 0, 2],
+          ["\u00F6k", 0, 3]
+        ];
+
+        /** @const */
+        var a_9 = [
+          ["\u00E9i", -1, 1],
+          ["\u00E1\u00E9i", 0, 3],
+          ["\u00E9\u00E9i", 0, 2],
+          ["\u00E9", -1, 1],
+          ["k\u00E9", 3, 1],
+          ["ak\u00E9", 4, 1],
+          ["ek\u00E9", 4, 1],
+          ["ok\u00E9", 4, 1],
+          ["\u00E1k\u00E9", 4, 3],
+          ["\u00E9k\u00E9", 4, 2],
+          ["\u00F6k\u00E9", 4, 1],
+          ["\u00E9\u00E9", 3, 2]
+        ];
+
+        /** @const */
+        var a_10 = [
+          ["a", -1, 1],
+          ["ja", 0, 1],
+          ["d", -1, 1],
+          ["ad", 2, 1],
+          ["ed", 2, 1],
+          ["od", 2, 1],
+          ["\u00E1d", 2, 2],
+          ["\u00E9d", 2, 3],
+          ["\u00F6d", 2, 1],
+          ["e", -1, 1],
+          ["je", 9, 1],
+          ["nk", -1, 1],
+          ["unk", 11, 1],
+          ["\u00E1nk", 11, 2],
+          ["\u00E9nk", 11, 3],
+          ["\u00FCnk", 11, 1],
+          ["uk", -1, 1],
+          ["juk", 16, 1],
+          ["\u00E1juk", 17, 2],
+          ["\u00FCk", -1, 1],
+          ["j\u00FCk", 19, 1],
+          ["\u00E9j\u00FCk", 20, 3],
+          ["m", -1, 1],
+          ["am", 22, 1],
+          ["em", 22, 1],
+          ["om", 22, 1],
+          ["\u00E1m", 22, 2],
+          ["\u00E9m", 22, 3],
+          ["o", -1, 1],
+          ["\u00E1", -1, 2],
+          ["\u00E9", -1, 3]
+        ];
+
+        /** @const */
+        var a_11 = [
+          ["id", -1, 1],
+          ["aid", 0, 1],
+          ["jaid", 1, 1],
+          ["eid", 0, 1],
+          ["jeid", 3, 1],
+          ["\u00E1id", 0, 2],
+          ["\u00E9id", 0, 3],
+          ["i", -1, 1],
+          ["ai", 7, 1],
+          ["jai", 8, 1],
+          ["ei", 7, 1],
+          ["jei", 10, 1],
+          ["\u00E1i", 7, 2],
+          ["\u00E9i", 7, 3],
+          ["itek", -1, 1],
+          ["eitek", 14, 1],
+          ["jeitek", 15, 1],
+          ["\u00E9itek", 14, 3],
+          ["ik", -1, 1],
+          ["aik", 18, 1],
+          ["jaik", 19, 1],
+          ["eik", 18, 1],
+          ["jeik", 21, 1],
+          ["\u00E1ik", 18, 2],
+          ["\u00E9ik", 18, 3],
+          ["ink", -1, 1],
+          ["aink", 25, 1],
+          ["jaink", 26, 1],
+          ["eink", 25, 1],
+          ["jeink", 28, 1],
+          ["\u00E1ink", 25, 2],
+          ["\u00E9ink", 25, 3],
+          ["aitok", -1, 1],
+          ["jaitok", 32, 1],
+          ["\u00E1itok", -1, 2],
+          ["im", -1, 1],
+          ["aim", 35, 1],
+          ["jaim", 36, 1],
+          ["eim", 35, 1],
+          ["jeim", 38, 1],
+          ["\u00E1im", 35, 2],
+          ["\u00E9im", 35, 3]
+        ];
+
+        /** @const */
+        var /** Array<int> */ g_v = [17, 65, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 17, 36, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1];
+
+        var /** number */ I_p1 = 0;
+
+
+        /** @return {boolean} */
+        function r_mark_regions() {
+          // (, line 44
+          I_p1 = base.limit;
+          // or, line 51
+          lab0: {
+            var /** number */ v_1 = base.cursor;
+            lab1: {
+              // (, line 48
+              if (!(base.in_grouping(g_v, 97, 369))) {
+                break lab1;
+              }
+              // goto, line 48
+              golab2: while (true) {
+                var /** number */ v_2 = base.cursor;
+                lab3: {
+                  if (!(base.out_grouping(g_v, 97, 369))) {
+                    break lab3;
                   }
-                  I_p1 = sbp.cursor;
-                  return;
+                  base.cursor = v_2;
+                  break golab2;
                 }
-                sbp.cursor = v_2;
-                if (v_2 >= sbp.limit) {
-                  I_p1 = v_2;
-                  return;
+                base.cursor = v_2;
+                if (base.cursor >= base.limit) {
+                  break lab1;
                 }
-                sbp.cursor++;
+                base.cursor++;
               }
-            }
-            sbp.cursor = v_1;
-            if (sbp.out_grouping(g_v, 97, 252)) {
-              while (!sbp.in_grouping(g_v, 97, 252)) {
-                if (sbp.cursor >= sbp.limit)
-                  return;
-                sbp.cursor++;
-              }
-              I_p1 = sbp.cursor;
-            }
-          }
-
-          function r_R1() {
-            return I_p1 <= sbp.cursor;
-          }
-
-          function r_v_ending() {
-            var among_var;
-            sbp.ket = sbp.cursor;
-            among_var = sbp.find_among_b(a_1, 2);
-            if (among_var) {
-              sbp.bra = sbp.cursor;
-              if (r_R1()) {
-                switch (among_var) {
-                  case 1:
-                    sbp.slice_from("a");
-                    break;
-                  case 2:
-                    sbp.slice_from("e");
-                    break;
+              // or, line 49
+              lab4: {
+                var /** number */ v_3 = base.cursor;
+                lab5: {
+                  // among, line 49
+                  if (base.find_among(a_0) == 0) {
+                    break lab5;
+                  }
+                  break lab4;
                 }
+                base.cursor = v_3;
+                // next, line 49
+                if (base.cursor >= base.limit) {
+                  break lab1;
+                }
+                base.cursor++;
               }
+              // setmark p1, line 50
+              I_p1 = base.cursor;
+              break lab0;
             }
-          }
-
-          function r_double() {
-            var v_1 = sbp.limit - sbp.cursor;
-            if (!sbp.find_among_b(a_2, 23))
+            base.cursor = v_1;
+            // (, line 53
+            if (!(base.out_grouping(g_v, 97, 369))) {
               return false;
-            sbp.cursor = sbp.limit - v_1;
-            return true;
-          }
-
-          function r_undouble() {
-            if (sbp.cursor > sbp.limit_backward) {
-              sbp.cursor--;
-              sbp.ket = sbp.cursor;
-              var c = sbp.cursor - 1;
-              if (sbp.limit_backward <= c && c <= sbp.limit) {
-                sbp.cursor = c;
-                sbp.bra = c;
-                sbp.slice_del();
-              }
             }
-          }
-
-          function r_instrum() {
-            var among_var;
-            sbp.ket = sbp.cursor;
-            among_var = sbp.find_among_b(a_3, 2);
-            if (among_var) {
-              sbp.bra = sbp.cursor;
-              if (r_R1()) {
-                if (among_var == 1 || among_var == 2)
-                  if (!r_double())
-                    return;
-                sbp.slice_del();
-                r_undouble();
-              }
-            }
-          }
-
-          function r_case() {
-            sbp.ket = sbp.cursor;
-            if (sbp.find_among_b(a_4, 44)) {
-              sbp.bra = sbp.cursor;
-              if (r_R1()) {
-                sbp.slice_del();
-                r_v_ending();
-              }
-            }
-          }
-
-          function r_case_special() {
-            var among_var;
-            sbp.ket = sbp.cursor;
-            among_var = sbp.find_among_b(a_5, 3);
-            if (among_var) {
-              sbp.bra = sbp.cursor;
-              if (r_R1()) {
-                switch (among_var) {
-                  case 1:
-                    sbp.slice_from("e");
-                    break;
-                  case 2:
-                  case 3:
-                    sbp.slice_from("a");
-                    break;
+            // gopast, line 53
+            golab6: while (true) {
+              lab7: {
+                if (!(base.in_grouping(g_v, 97, 369))) {
+                  break lab7;
                 }
+                break golab6;
               }
-            }
-          }
-
-          function r_case_other() {
-            var among_var;
-            sbp.ket = sbp.cursor;
-            among_var = sbp.find_among_b(a_6, 6);
-            if (among_var) {
-              sbp.bra = sbp.cursor;
-              if (r_R1()) {
-                switch (among_var) {
-                  case 1:
-                  case 2:
-                    sbp.slice_del();
-                    break;
-                  case 3:
-                    sbp.slice_from("a");
-                    break;
-                  case 4:
-                    sbp.slice_from("e");
-                    break;
-                }
+              if (base.cursor >= base.limit) {
+                return false;
               }
+              base.cursor++;
             }
+            // setmark p1, line 53
+            I_p1 = base.cursor;
           }
-
-          function r_factive() {
-            var among_var;
-            sbp.ket = sbp.cursor;
-            among_var = sbp.find_among_b(a_7, 2);
-            if (among_var) {
-              sbp.bra = sbp.cursor;
-              if (r_R1()) {
-                if (among_var == 1 || among_var == 2)
-                  if (!r_double())
-                    return;
-                sbp.slice_del();
-                r_undouble()
-              }
-            }
-          }
-
-          function r_plural() {
-            var among_var;
-            sbp.ket = sbp.cursor;
-            among_var = sbp.find_among_b(a_8, 7);
-            if (among_var) {
-              sbp.bra = sbp.cursor;
-              if (r_R1()) {
-                switch (among_var) {
-                  case 1:
-                    sbp.slice_from("a");
-                    break;
-                  case 2:
-                    sbp.slice_from("e");
-                    break;
-                  case 3:
-                  case 4:
-                  case 5:
-                  case 6:
-                  case 7:
-                    sbp.slice_del();
-                    break;
-                }
-              }
-            }
-          }
-
-          function r_owned() {
-            var among_var;
-            sbp.ket = sbp.cursor;
-            among_var = sbp.find_among_b(a_9, 12);
-            if (among_var) {
-              sbp.bra = sbp.cursor;
-              if (r_R1()) {
-                switch (among_var) {
-                  case 1:
-                  case 4:
-                  case 7:
-                  case 9:
-                    sbp.slice_del();
-                    break;
-                  case 2:
-                  case 5:
-                  case 8:
-                    sbp.slice_from("e");
-                    break;
-                  case 3:
-                  case 6:
-                    sbp.slice_from("a");
-                    break;
-                }
-              }
-            }
-          }
-
-          function r_sing_owner() {
-            var among_var;
-            sbp.ket = sbp.cursor;
-            among_var = sbp.find_among_b(a_10, 31);
-            if (among_var) {
-              sbp.bra = sbp.cursor;
-              if (r_R1()) {
-                switch (among_var) {
-                  case 1:
-                  case 4:
-                  case 7:
-                  case 8:
-                  case 9:
-                  case 12:
-                  case 13:
-                  case 16:
-                  case 17:
-                  case 18:
-                    sbp.slice_del();
-                    break;
-                  case 2:
-                  case 5:
-                  case 10:
-                  case 14:
-                  case 19:
-                    sbp.slice_from("a");
-                    break;
-                  case 3:
-                  case 6:
-                  case 11:
-                  case 15:
-                  case 20:
-                    sbp.slice_from("e");
-                    break;
-                }
-              }
-            }
-          }
-
-          function r_plur_owner() {
-            var among_var;
-            sbp.ket = sbp.cursor;
-            among_var = sbp.find_among_b(a_11, 42);
-            if (among_var) {
-              sbp.bra = sbp.cursor;
-              if (r_R1()) {
-                switch (among_var) {
-                  case 1:
-                  case 4:
-                  case 5:
-                  case 6:
-                  case 9:
-                  case 10:
-                  case 11:
-                  case 14:
-                  case 15:
-                  case 16:
-                  case 17:
-                  case 20:
-                  case 21:
-                  case 24:
-                  case 25:
-                  case 26:
-                  case 29:
-                    sbp.slice_del();
-                    break;
-                  case 2:
-                  case 7:
-                  case 12:
-                  case 18:
-                  case 22:
-                  case 27:
-                    sbp.slice_from("a");
-                    break;
-                  case 3:
-                  case 8:
-                  case 13:
-                  case 19:
-                  case 23:
-                  case 28:
-                    sbp.slice_from("e");
-                    break;
-                }
-              }
-            }
-          }
-          this.stem = function() {
-            var v_1 = sbp.cursor;
-            r_mark_regions();
-            sbp.limit_backward = v_1;
-            sbp.cursor = sbp.limit;
-            r_instrum();
-            sbp.cursor = sbp.limit;
-            r_case();
-            sbp.cursor = sbp.limit;
-            r_case_special();
-            sbp.cursor = sbp.limit;
-            r_case_other();
-            sbp.cursor = sbp.limit;
-            r_factive();
-            sbp.cursor = sbp.limit;
-            r_owned();
-            sbp.cursor = sbp.limit;
-            r_sing_owner();
-            sbp.cursor = sbp.limit;
-            r_plur_owner();
-            sbp.cursor = sbp.limit;
-            r_plural();
-            return true;
-          }
+          return true;
         };
+
+        /** @return {boolean} */
+        function r_R1() {
+          if (!(I_p1 <= base.cursor)) {
+            return false;
+          }
+          return true;
+        };
+
+        /** @return {boolean} */
+        function r_v_ending() {
+          var /** number */ among_var;
+          // (, line 60
+          // [, line 61
+          base.ket = base.cursor;
+          // substring, line 61
+          among_var = base.find_among_b(a_1);
+          if (among_var == 0) {
+            return false;
+          }
+          // ], line 61
+          base.bra = base.cursor;
+          // call R1, line 61
+          if (!r_R1()) {
+            return false;
+          }
+          switch (among_var) {
+            case 1:
+              // (, line 62
+              // <-, line 62
+              if (!base.slice_from("a")) {
+                return false;
+              }
+              break;
+            case 2:
+              // (, line 63
+              // <-, line 63
+              if (!base.slice_from("e")) {
+                return false;
+              }
+              break;
+          }
+          return true;
+        };
+
+        /** @return {boolean} */
+        function r_double() {
+          // (, line 67
+          // test, line 68
+          var /** number */ v_1 = base.limit - base.cursor;
+          // among, line 68
+          if (base.find_among_b(a_2) == 0) {
+            return false;
+          }
+          base.cursor = base.limit - v_1;
+          return true;
+        };
+
+        /** @return {boolean} */
+        function r_undouble() {
+          // (, line 72
+          // next, line 73
+          if (base.cursor <= base.limit_backward) {
+            return false;
+          }
+          base.cursor--;
+          // [, line 73
+          base.ket = base.cursor;
+          // hop, line 73
+          {
+            var /** number */ c1 = base.cursor - 1;
+            if (base.limit_backward > c1 || c1 > base.limit) {
+              return false;
+            }
+            base.cursor = c1;
+          }
+          // ], line 73
+          base.bra = base.cursor;
+          // delete, line 73
+          if (!base.slice_del()) {
+            return false;
+          }
+          return true;
+        };
+
+        /** @return {boolean} */
+        function r_instrum() {
+          // (, line 76
+          // [, line 77
+          base.ket = base.cursor;
+          // substring, line 77
+          if (base.find_among_b(a_3) == 0) {
+            return false;
+          }
+          // ], line 77
+          base.bra = base.cursor;
+          // call R1, line 77
+          if (!r_R1()) {
+            return false;
+          }
+          // (, line 78
+          // call double, line 78
+          if (!r_double()) {
+            return false;
+          }
+          // delete, line 81
+          if (!base.slice_del()) {
+            return false;
+          }
+          // call undouble, line 82
+          if (!r_undouble()) {
+            return false;
+          }
+          return true;
+        };
+
+        /** @return {boolean} */
+        function r_case() {
+          // (, line 86
+          // [, line 87
+          base.ket = base.cursor;
+          // substring, line 87
+          if (base.find_among_b(a_4) == 0) {
+            return false;
+          }
+          // ], line 87
+          base.bra = base.cursor;
+          // call R1, line 87
+          if (!r_R1()) {
+            return false;
+          }
+          // delete, line 111
+          if (!base.slice_del()) {
+            return false;
+          }
+          // call v_ending, line 112
+          if (!r_v_ending()) {
+            return false;
+          }
+          return true;
+        };
+
+        /** @return {boolean} */
+        function r_case_special() {
+          var /** number */ among_var;
+          // (, line 115
+          // [, line 116
+          base.ket = base.cursor;
+          // substring, line 116
+          among_var = base.find_among_b(a_5);
+          if (among_var == 0) {
+            return false;
+          }
+          // ], line 116
+          base.bra = base.cursor;
+          // call R1, line 116
+          if (!r_R1()) {
+            return false;
+          }
+          switch (among_var) {
+            case 1:
+              // (, line 117
+              // <-, line 117
+              if (!base.slice_from("e")) {
+                return false;
+              }
+              break;
+            case 2:
+              // (, line 118
+              // <-, line 118
+              if (!base.slice_from("a")) {
+                return false;
+              }
+              break;
+          }
+          return true;
+        };
+
+        /** @return {boolean} */
+        function r_case_other() {
+          var /** number */ among_var;
+          // (, line 123
+          // [, line 124
+          base.ket = base.cursor;
+          // substring, line 124
+          among_var = base.find_among_b(a_6);
+          if (among_var == 0) {
+            return false;
+          }
+          // ], line 124
+          base.bra = base.cursor;
+          // call R1, line 124
+          if (!r_R1()) {
+            return false;
+          }
+          switch (among_var) {
+            case 1:
+              // (, line 125
+              // delete, line 125
+              if (!base.slice_del()) {
+                return false;
+              }
+              break;
+            case 2:
+              // (, line 127
+              // <-, line 127
+              if (!base.slice_from("a")) {
+                return false;
+              }
+              break;
+            case 3:
+              // (, line 128
+              // <-, line 128
+              if (!base.slice_from("e")) {
+                return false;
+              }
+              break;
+          }
+          return true;
+        };
+
+        /** @return {boolean} */
+        function r_factive() {
+          // (, line 132
+          // [, line 133
+          base.ket = base.cursor;
+          // substring, line 133
+          if (base.find_among_b(a_7) == 0) {
+            return false;
+          }
+          // ], line 133
+          base.bra = base.cursor;
+          // call R1, line 133
+          if (!r_R1()) {
+            return false;
+          }
+          // (, line 134
+          // call double, line 134
+          if (!r_double()) {
+            return false;
+          }
+          // delete, line 137
+          if (!base.slice_del()) {
+            return false;
+          }
+          // call undouble, line 138
+          if (!r_undouble()) {
+            return false;
+          }
+          return true;
+        };
+
+        /** @return {boolean} */
+        function r_plural() {
+          var /** number */ among_var;
+          // (, line 141
+          // [, line 142
+          base.ket = base.cursor;
+          // substring, line 142
+          among_var = base.find_among_b(a_8);
+          if (among_var == 0) {
+            return false;
+          }
+          // ], line 142
+          base.bra = base.cursor;
+          // call R1, line 142
+          if (!r_R1()) {
+            return false;
+          }
+          switch (among_var) {
+            case 1:
+              // (, line 143
+              // <-, line 143
+              if (!base.slice_from("a")) {
+                return false;
+              }
+              break;
+            case 2:
+              // (, line 144
+              // <-, line 144
+              if (!base.slice_from("e")) {
+                return false;
+              }
+              break;
+            case 3:
+              // (, line 145
+              // delete, line 145
+              if (!base.slice_del()) {
+                return false;
+              }
+              break;
+          }
+          return true;
+        };
+
+        /** @return {boolean} */
+        function r_owned() {
+          var /** number */ among_var;
+          // (, line 153
+          // [, line 154
+          base.ket = base.cursor;
+          // substring, line 154
+          among_var = base.find_among_b(a_9);
+          if (among_var == 0) {
+            return false;
+          }
+          // ], line 154
+          base.bra = base.cursor;
+          // call R1, line 154
+          if (!r_R1()) {
+            return false;
+          }
+          switch (among_var) {
+            case 1:
+              // (, line 155
+              // delete, line 155
+              if (!base.slice_del()) {
+                return false;
+              }
+              break;
+            case 2:
+              // (, line 156
+              // <-, line 156
+              if (!base.slice_from("e")) {
+                return false;
+              }
+              break;
+            case 3:
+              // (, line 157
+              // <-, line 157
+              if (!base.slice_from("a")) {
+                return false;
+              }
+              break;
+          }
+          return true;
+        };
+
+        /** @return {boolean} */
+        function r_sing_owner() {
+          var /** number */ among_var;
+          // (, line 167
+          // [, line 168
+          base.ket = base.cursor;
+          // substring, line 168
+          among_var = base.find_among_b(a_10);
+          if (among_var == 0) {
+            return false;
+          }
+          // ], line 168
+          base.bra = base.cursor;
+          // call R1, line 168
+          if (!r_R1()) {
+            return false;
+          }
+          switch (among_var) {
+            case 1:
+              // (, line 169
+              // delete, line 169
+              if (!base.slice_del()) {
+                return false;
+              }
+              break;
+            case 2:
+              // (, line 170
+              // <-, line 170
+              if (!base.slice_from("a")) {
+                return false;
+              }
+              break;
+            case 3:
+              // (, line 171
+              // <-, line 171
+              if (!base.slice_from("e")) {
+                return false;
+              }
+              break;
+          }
+          return true;
+        };
+
+        /** @return {boolean} */
+        function r_plur_owner() {
+          var /** number */ among_var;
+          // (, line 192
+          // [, line 193
+          base.ket = base.cursor;
+          // substring, line 193
+          among_var = base.find_among_b(a_11);
+          if (among_var == 0) {
+            return false;
+          }
+          // ], line 193
+          base.bra = base.cursor;
+          // call R1, line 193
+          if (!r_R1()) {
+            return false;
+          }
+          switch (among_var) {
+            case 1:
+              // (, line 194
+              // delete, line 194
+              if (!base.slice_del()) {
+                return false;
+              }
+              break;
+            case 2:
+              // (, line 195
+              // <-, line 195
+              if (!base.slice_from("a")) {
+                return false;
+              }
+              break;
+            case 3:
+              // (, line 196
+              // <-, line 196
+              if (!base.slice_from("e")) {
+                return false;
+              }
+              break;
+          }
+          return true;
+        };
+
+        this.stem = /** @return {boolean} */ function() {
+          // (, line 228
+          // do, line 229
+          var /** number */ v_1 = base.cursor;
+          lab0: {
+            // call mark_regions, line 229
+            if (!r_mark_regions()) {
+              break lab0;
+            }
+          }
+          base.cursor = v_1;
+          // backwards, line 230
+          base.limit_backward = base.cursor;
+          base.cursor = base.limit;
+          // (, line 230
+          // do, line 231
+          var /** number */ v_2 = base.limit - base.cursor;
+          lab1: {
+            // call instrum, line 231
+            if (!r_instrum()) {
+              break lab1;
+            }
+          }
+          base.cursor = base.limit - v_2;
+          // do, line 232
+          var /** number */ v_3 = base.limit - base.cursor;
+          lab2: {
+            // call case, line 232
+            if (!r_case()) {
+              break lab2;
+            }
+          }
+          base.cursor = base.limit - v_3;
+          // do, line 233
+          var /** number */ v_4 = base.limit - base.cursor;
+          lab3: {
+            // call case_special, line 233
+            if (!r_case_special()) {
+              break lab3;
+            }
+          }
+          base.cursor = base.limit - v_4;
+          // do, line 234
+          var /** number */ v_5 = base.limit - base.cursor;
+          lab4: {
+            // call case_other, line 234
+            if (!r_case_other()) {
+              break lab4;
+            }
+          }
+          base.cursor = base.limit - v_5;
+          // do, line 235
+          var /** number */ v_6 = base.limit - base.cursor;
+          lab5: {
+            // call factive, line 235
+            if (!r_factive()) {
+              break lab5;
+            }
+          }
+          base.cursor = base.limit - v_6;
+          // do, line 236
+          var /** number */ v_7 = base.limit - base.cursor;
+          lab6: {
+            // call owned, line 236
+            if (!r_owned()) {
+              break lab6;
+            }
+          }
+          base.cursor = base.limit - v_7;
+          // do, line 237
+          var /** number */ v_8 = base.limit - base.cursor;
+          lab7: {
+            // call sing_owner, line 237
+            if (!r_sing_owner()) {
+              break lab7;
+            }
+          }
+          base.cursor = base.limit - v_8;
+          // do, line 238
+          var /** number */ v_9 = base.limit - base.cursor;
+          lab8: {
+            // call plur_owner, line 238
+            if (!r_plur_owner()) {
+              break lab8;
+            }
+          }
+          base.cursor = base.limit - v_9;
+          // do, line 239
+          var /** number */ v_10 = base.limit - base.cursor;
+          lab9: {
+            // call plural, line 239
+            if (!r_plural()) {
+              break lab9;
+            }
+          }
+          base.cursor = base.limit - v_10;
+          base.cursor = base.limit_backward;
+          return true;
+        };
+
+        /**@return{string}*/
+        this['stemWord'] = function( /**string*/ word) {
+          base.setCurrent(word);
+          this.stem();
+          return base.getCurrent();
+        };
+      };;
 
       /* and return a function that stems a word for the current locale */
       return function(token) {
         // for lunr version 2
         if (typeof token.update === "function") {
           return token.update(function(word) {
-            st.setCurrent(word);
-            st.stem();
-            return st.getCurrent();
+            return st.stemWord(word);
           })
         } else { // for lunr version <= 1
-          st.setCurrent(token);
-          st.stem();
-          return st.getCurrent();
+          return st.stemWord(token);
         }
       }
     })();
 
     lunr.Pipeline.registerFunction(lunr.hu.stemmer, 'stemmer-hu');
 
-    lunr.hu.stopWordFilter = lunr.generateStopWordFilter('a abban ahhoz ahogy ahol aki akik akkor alatt amely amelyek amelyekben amelyeket amelyet amelynek ami amikor amit amolyan amíg annak arra arról az azok azon azonban azt aztán azután azzal azért be belül benne bár cikk cikkek cikkeket csak de e ebben eddig egy egyes egyetlen egyik egyre egyéb egész ehhez ekkor el ellen elsõ elég elõ elõször elõtt emilyen ennek erre ez ezek ezen ezt ezzel ezért fel felé hanem hiszen hogy hogyan igen ill ill. illetve ilyen ilyenkor ismét ison itt jobban jó jól kell kellett keressünk keresztül ki kívül között közül legalább legyen lehet lehetett lenne lenni lesz lett maga magát majd majd meg mellett mely melyek mert mi mikor milyen minden mindenki mindent mindig mint mintha mit mivel miért most már más másik még míg nagy nagyobb nagyon ne nekem neki nem nincs néha néhány nélkül olyan ott pedig persze rá s saját sem semmi sok sokat sokkal szemben szerint szinte számára talán tehát teljes tovább továbbá több ugyanis utolsó után utána vagy vagyis vagyok valaki valami valamint való van vannak vele vissza viszont volna volt voltak voltam voltunk által általában át én éppen és így õ õk õket össze úgy új újabb újra'.split(' '));
+    lunr.hu.stopWordFilter = lunr.generateStopWordFilter("a abban ahhoz ahogy ahol aki akik akkor alatt amely amelyek amelyekben amelyeket amelyet amelynek ami amikor amit amolyan amíg annak arra arról az azok azon azonban azt aztán azután azzal azért be belül benne bár cikk cikkek cikkeket csak de e ebben eddig egy egyes egyetlen egyik egyre egyéb egész ehhez ekkor el ellen elsõ elég elõ elõször elõtt emilyen ennek erre ez ezek ezen ezt ezzel ezért fel felé hanem hiszen hogy hogyan igen ill ill. illetve ilyen ilyenkor ismét ison itt jobban jó jól kell kellett keressünk keresztül ki kívül között közül legalább legyen lehet lehetett lenne lenni lesz lett maga magát majd majd meg mellett mely melyek mert mi mikor milyen minden mindenki mindent mindig mint mintha mit mivel miért most már más másik még míg nagy nagyobb nagyon ne nekem neki nem nincs néha néhány nélkül olyan ott pedig persze rá s saját sem semmi sok sokat sokkal szemben szerint szinte számára talán tehát teljes tovább továbbá több ugyanis utolsó után utána vagy vagyis vagyok valaki valami valamint való van vannak vele vissza viszont volna volt voltak voltam voltunk által általában át én éppen és így õ õk õket össze úgy új újabb újra".split(' '));
 
     lunr.Pipeline.registerFunction(lunr.hu.stopWordFilter, 'stopWordFilter-hu');
   };
