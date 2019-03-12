@@ -1,7 +1,6 @@
 var assert = require('assert');
 
 var lunrVersions = [
-  /*
   {
     version: "0.6.0",
     lunr: "lunr-0.6.0.min"
@@ -15,11 +14,6 @@ var lunrVersions = [
     version: "2.0.1",
     lunr: "lunr-2.0.1"
   },
-  */
-  {
-    version: "2.3.3",
-    lunr: "../../../lunr.js/lunr"
-  }
 ];
 
 var testDocuments = {
