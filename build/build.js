@@ -191,8 +191,8 @@ for(var i = 0; i < list.length; i++) {
 
 console.log('Building Stemmer Support');
 // build stemmer support
-var support = fs.readFileSync('lunr.stemmer.support.js', 'utf8');
-fs.writeFile('min/lunr.stemmer.support.min.js', compress(support));
+var support = fs.readFileSync('lunr.trimmer.support.js', 'utf8');
+fs.writeFile('min/lunr.trimmer.support.min.js', compress(support));
 var baseStemmer = fs.readFileSync('build/snowball/jsstemmer/base-stemmer.js', 'utf8');
 fs.writeFile('base-stemmer.js', baseStemmer);
 fs.writeFile('min/base-stemmer.min.js', compress(baseStemmer));

@@ -1,6 +1,7 @@
 var assert = require('assert');
 
 var lunrVersions = [
+  /*
   {
     version: "0.6.0",
     lunr: "lunr-0.6.0.min"
@@ -13,26 +14,33 @@ var lunrVersions = [
   }, {
     version: "2.0.1",
     lunr: "lunr-2.0.1"
+  },
+  */
+  {
+    version: "2.3.3",
+    lunr: "../../../lunr.js/lunr"
   }
 ];
 
 var testDocuments = {
-  de: require('./testdata/de'),
+  ar: require('./testdata/ar'),
   da: require('./testdata/da'),
-  nl: require('./testdata/du'),
+  de: require('./testdata/de'),
+  el: require('./testdata/el'),
   es: require('./testdata/es'),
   fi: require('./testdata/fi'),
   fr: require('./testdata/fr'),
   hu: require('./testdata/hu'),
   it: require('./testdata/it'),
   ja: require('./testdata/ja'),
+  nl: require('./testdata/du'),
   no: require('./testdata/no'),
   pt: require('./testdata/pt'),
   ro: require('./testdata/ro'),
   ru: require('./testdata/ru'),
   sv: require('./testdata/sv'),
+  th: require('./testdata/th'),
   tr: require('./testdata/tr'),
-  th: require('./testdata/th')
 };
 
 lunrVersions.forEach(function(lunrVersion) {
@@ -41,7 +49,7 @@ lunrVersions.forEach(function(lunrVersion) {
       delete require.cache[require.resolve('./lunr/' + lunrVersion.lunr)]
       var lunr = require('./lunr/' + lunrVersion.lunr);
       require('../base-stemmer.js');
-      require('../lunr.stemmer.support.js')(lunr);
+      require('../lunr.trimmer.support.js')(lunr);
       require('../lunr.ru.js')(lunr);
       require('../lunr.multi.js')(lunr);
 
@@ -98,7 +106,7 @@ lunrVersions.forEach(function(lunrVersion) {
 
         var lunr = require('./lunr/' + lunrVersion.lunr);
         require('../base-stemmer.js');
-        require('../lunr.stemmer.support.js')(lunr);
+        require('../lunr.trimmer.support.js')(lunr);
         if (language === 'ja' || language === 'jp') {    // for japanese, we must also load the tinyseg tokenizer
           require('../tinyseg')(lunr);
         }

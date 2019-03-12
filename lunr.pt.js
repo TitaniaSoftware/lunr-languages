@@ -48,8 +48,8 @@
     }
 
     /* throw error if lunr stemmer support is not yet included */
-    if ('undefined' === typeof lunr.stemmerSupport) {
-      throw new Error('Lunr stemmer support is not present. Please include / require Lunr stemmer support before this script.');
+    if ('undefined' === typeof lunr.trimmerSupport) {
+      throw new Error('Lunr trimmer support is not present. Please include / require Lunr trimmer support before this script.');
     }
 
     /* register specific locale function */
